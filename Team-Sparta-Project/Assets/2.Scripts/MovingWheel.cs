@@ -11,6 +11,6 @@ public class MovingWheel : MonoBehaviour
 
     private void Update()
     {
-        this.transform.Rotate(new Vector3(0f, 0f, moveSpeed) * Time.deltaTime);
+        this.transform.Rotate(new Vector3(0f, 0f, -moveSpeed) * Time.deltaTime);
     }
 }
