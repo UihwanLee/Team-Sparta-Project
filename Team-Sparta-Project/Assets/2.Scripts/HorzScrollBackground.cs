@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParallaxController: MonoBehaviour
+public class HorzScrollBackground : MonoBehaviour
 {
     // 수평 구조로 움직이는 애니메이션 스크립트
 
