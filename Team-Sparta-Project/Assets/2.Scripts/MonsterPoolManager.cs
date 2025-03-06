@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class MonsterPoolManager : MonoBehaviour
 {
-    // 몬스터 오브젝트 폴링 관리 스크립트
+    /* 
+     * 몬스터 오브젝트 폴링 관리 스크립트
+     *
+     * 몬스터 타입 별 배열로 관리
+    */
 
     private static MonsterPoolManager instance = null;
 
@@ -34,13 +38,11 @@ public class MonsterPoolManager : MonoBehaviour
     }
 
     // 소환할 몬스터 종류
-    [SerializeField]
-    private GameObject monsterPrefab;
-    [SerializeField]
-    private int maxMonsterSize;
+    [SerializeField] private List<Monster> monsters;
+    [SerializeField] private GameObject monsterPrefab;
 
     // 몬스터 오브젝트를 관리할 리스트
-    private GameObject[] monsterPoolList;
+    private Dictionary<int, GameObject[]> monsterPoolList = new Dictionary<int, GameObject[]>();
 
     private void Start()
     {
@@ -49,40 +51,56 @@ public class MonsterPoolManager : MonoBehaviour
 
     private void InitMonsterPoolList()
     {
-        // 몬스터 리스트 초기화
-        monsterPoolList = new GameObject[maxMonsterSize];
-
-        // 몬스터 세팅
-        for(int i= 0; i < monsterPoolList.Length; i++)
+        // 몬스터 타입 별 리스트 초기화
+        foreach(Monster monster in monsters)
         {
-            monsterPoolList[i] = Instantiate(monsterPrefab, Vector3.zero, Quaternion.identity);
-            monsterPoolList[i].GetComponent<MonsterController>().SetID(i);
-            monsterPoolList[i].SetActive(false);
+            GameObject[] monsterList = new GameObject[monster.maxCount];
+
+            // 몬스터 세팅
+            for (int i = 0; i < monsterList.Length; i++)
+            {
+                monsterList[i] = Instantiate(monsterPrefab, Vector3.zero, Quaternion.identity);
+
+                monsterList[i].GetComponent<MonsterController>().SetInfo(i, monster.title, monster.level, monster.hp, monster.damage, monster.speed);
+                monsterList[i].GetComponent<MonsterController>().SetSprites(monster.sprites);
+                monsterList[i].SetActive(false);
+            }
+
+            monsterPoolList[monster.level] = monsterList;
         }
     }
 
-    public GameObject GetMonsterFromPool()
+    public GameObject GetMonsterFromPool(int _level)
     {
-        // 현재 몬스터 폴에서 사용할 수 있는 몬스터 반환
-        for(int i=0; i < monsterPoolList.Length; i++)
+        // 주어진 몬스터 레벨 폴에서 사용할 수 있는 몬스터 반환
+        GameObject[] monsterList = monsterPoolList[_level];
+        if(monsterList == null) { Debug.LogError("That monster list does not exist!"); return null; }
+
+        for (int i=0; i < monsterList.Length; i++)
         {
-            if (monsterPoolList[i].activeSelf == false)
+            if (monsterList[i].activeSelf == false)
             {
-                monsterPoolList[i].SetActive(true);
-                return monsterPoolList[i];
+                monsterList[i].SetActive(true);
+                return monsterList[i];
             }
         }
 
         return null;
     }
 
-    public GameObject GetMonsterFromPool(int _id)
+    public GameObject GetMonsterFromPool(int _level, int _id)
     {
-        return monsterPoolList[_id];
+        GameObject[] monsterList = monsterPoolList[_level];
+        if (monsterList == null) { Debug.LogError("That monster list does not exist!"); return null; }
+
+        return monsterList[_id];
     }
 
-    public void ReleaseMonsterFromPool(int _id)
+    public void ReleaseMonsterFromPool(int _level, int _id)
     {
-        monsterPoolList[_id].SetActive(false);
+        GameObject[] monsterList = monsterPoolList[_level];
+        if (monsterList == null) { Debug.LogError("That monster list does not exist!"); return; }
+
+        monsterList[_id].SetActive(false);
     }
 }

@@ -38,11 +38,12 @@ public class MonsterSpawnManager : MonoBehaviour
 
     private void SpawnMonsterPoint()
     {
-        GameObject monster = MonsterPoolManager.Instance.GetMonsterFromPool();
+        int level = 0;
+        GameObject monster = MonsterPoolManager.Instance.GetMonsterFromPool(level);
 
         if (monster == null)
         {
-            Debug.Log("There are no objects available!");
+            Debug.LogError("There are no objects available!");
         }
 
         // 위치 설정

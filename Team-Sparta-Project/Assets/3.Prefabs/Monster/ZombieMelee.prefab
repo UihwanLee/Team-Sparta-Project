@@ -141,8 +141,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66e8c4b52f0d2ba40ad20b05973651f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  id: 0
+  title: 
+  level: 0
+  spawnPath: 0
+  speed: 0
   moveDir: {x: -1, y: 0, z: 0}
+  hp: 0
+  damage: 0
+  sprites:
+  - {fileID: 7969222207150852787}
+  - {fileID: 2228757155372488290}
+  - {fileID: 6012614561082821375}
+  - {fileID: 6851911621866096364}
+  - {fileID: 7928511827763145290}
+  - {fileID: 4391178048448326450}
+  monsterParts: []
 --- !u!1 &2094693183665648150
 GameObject:
   m_ObjectHideFlags: 0

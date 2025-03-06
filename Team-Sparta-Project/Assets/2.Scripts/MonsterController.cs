@@ -8,13 +8,15 @@ public class MonsterController : MonoBehaviour
 
     // 몬스터 정보
     [Header("Monster Info")]
-    private int id;                                     // 몬스터 id
-    private int type;                                   // 몬스터 타입
-    private int spawnPath;                              // 몬스터 경로
-    [SerializeField] private float moveSpeed;           // 몬스터 스피드
-    [SerializeField] private Vector3 moveDir;           // 몬스터 이동 방향
-    [SerializeField] private int hp;                    // 몬스터 체력.
-    [SerializeField] private int damage;                // 몬스터 공격력
+    [SerializeField] private int id;                            // 몬스터 id
+    [SerializeField] private string title;                      // 몬스터 타이틀
+    [SerializeField] private int level;                         // 몬스터 레벨
+    [SerializeField] private int spawnPath;                     // 몬스터 경로
+    [SerializeField] private float speed;                       // 몬스터 스피드
+    [SerializeField] private Vector3 moveDir;                   // 몬스터 이동 방향
+    [SerializeField] private int hp;                            // 몬스터 체력.
+    [SerializeField] private int damage;                        // 몬스터 공격력
+    [SerializeField] private List<SpriteRenderer> sprites;      // 몬스터 이미지
 
     [Header("Monster Part")]
     [SerializeField]
@@ -28,7 +30,7 @@ public class MonsterController : MonoBehaviour
     private void Update()
     {
         // 소환될 시 기본적으로 옆으로 이동
-        transform.position += moveDir * moveSpeed * Time.deltaTime;
+        transform.position += moveDir * speed * Time.deltaTime;
     }
 
     public void SetPath(int myPath, Collider2D myCollider, Collider2D[] ignorePath1, Collider2D[] ignorePath2)
@@ -51,7 +53,14 @@ public class MonsterController : MonoBehaviour
             }
         }
     }
-
     public void SetID(int _id) { id = _id; }
     public int GetID() { return id; }
+    public void SetSprites(List<Sprite> _sprites)
+    {
+        for(int i=0; i< _sprites.Count; i++)
+        {
+            this.sprites[i].sprite = _sprites[i];
+        }
+    }
+    public void SetInfo(int _id, string _title, int _level, int _hp, int _damage, float _speed) { id = _id; title = _title; level = _level; hp = _hp; damage = _damage; speed = _speed; }
 }
