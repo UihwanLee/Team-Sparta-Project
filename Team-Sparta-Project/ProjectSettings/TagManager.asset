@@ -45,3 +45,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Monster Path1
+    uniqueID: 3057071157
+    locked: 0
+  - name: Monster Path2
+    uniqueID: 1114760917
+    locked: 0
+  - name: Monster Path3
+    uniqueID: 546662205
+    locked: 0

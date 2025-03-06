@@ -19,9 +19,14 @@ public class MonsterSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        curTime = spawnTime;
-        InitPathColliders();
+        InitMonster();
         StartCoroutine(SpawnMonsters());
+    }
+
+    private void InitMonster()
+    {
+        curTime = spawnTime;
+        InitPathColliders();    // 몬스터 Collider 설정
     }
 
     private void InitPathColliders()
@@ -63,36 +68,49 @@ public class MonsterSpawner : MonoBehaviour
 
     private void SetMonsterPath(GameObject monster)
     {
+        // 몬스터 경로 설정
+
         // 경로 3개 중 1개를 랜덤으로 선택
-        int randomPathIndex = Random.Range(0, 3);  // 0, 1, 2 중 하나를 선택 (Path1, Path2, Path3)
+        int randomPathIndex = Random.Range(0, 3); 
 
         Collider2D myCollider = monster.GetComponent<Collider2D>();
         Collider2D[] collider1 = null;
         Collider2D[] collider2 = null;
-
-        Debug.Log("선택경로: " + randomPathIndex);
 
         // 경로 선택
         switch (randomPathIndex)
         {
             case 0:  // Path1 선택
                 collider1 = pathColliders[0];
-                collider2 = pathColliders[1]; // 나머지 2개 경로에서 선택
+                collider2 = pathColliders[1];
+                monster.layer = LayerMask.NameToLayer("Monster Path1");
                 break;
 
             case 1:  // Path2 선택
                 collider1 = pathColliders[1];
-                collider2 = pathColliders[2]; // 나머지 2개 경로에서 선택
+                collider2 = pathColliders[2];
+                monster.layer = LayerMask.NameToLayer("Monster Path2");
                 break;
 
             case 2:  // Path3 선택
                 collider1 = pathColliders[2];
-                collider2 = pathColliders[0]; // 나머지 2개 경로에서 선택
+                collider2 = pathColliders[0];
+                monster.layer = LayerMask.NameToLayer("Monster Path3");
                 break;
         }
 
         // 몬스터에게 경로 전달
         MonsterController monsterController = monster.GetComponent<MonsterController>();
         monsterController.SetPath(randomPathIndex, myCollider, collider1, collider2);
+    }
+
+    private void SetMonsterType()
+    {
+        // 몬스터 타입 설정
+    }
+
+    private void SetMonsterLayer()
+    {
+        // 몬스터 레이아웃 설정
     }
 }

@@ -29,8 +29,6 @@ public class HorzScrollBackground : MonoBehaviour
         // 배경이 카메라 범위 내 벗어나면 재설정
         if(transform.position.x <= -scrollAmount)
         {
-            Debug.Log(target.position);
-            Debug.Log(moveDir * scrollAmount * 2);
             this.transform.position = target.position - (moveDir * scrollAmount * 2);
         }
     }
