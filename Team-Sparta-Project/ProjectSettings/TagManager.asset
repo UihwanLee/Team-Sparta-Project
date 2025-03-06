@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Hero
+  - Path_1
+  - Path_2
+  - Path_3
   layers:
   - Default
   - TransparentFX
@@ -12,9 +16,9 @@ TagManager:
   - Water
   - UI
   - 
-  - 
-  - 
-  - 
+  - Monster Path1
+  - Monster Path2
+  - Monster Path3
   - 
   - 
   - 
@@ -40,4 +44,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Monster Path1
+    uniqueID: 3057071157
+    locked: 0
+  - name: Monster Path2
+    uniqueID: 1114760917
+    locked: 0
+  - name: Monster Path3
+    uniqueID: 546662205
     locked: 0
