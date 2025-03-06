@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class MonsterController : MonoBehaviour
 {
-    // 좀비 컨트롤러 스크립트
+    // 몬스터 컨트롤러 스크립트
 
-    [SerializeField]
-    private float moveSpeed;
-    [SerializeField]
-    private Vector3 moveDir;
+    // 몬스터 정보
+    [Header("Monster Info")]
+    private int id;                                     // 몬스터 id
+    private int type;                                   // 몬스터 타입
+    private int spawnPath;                              // 몬스터 경로
+    [SerializeField] private float moveSpeed;           // 몬스터 스피드
+    [SerializeField] private Vector3 moveDir;           // 몬스터 이동 방향
+    [SerializeField] private int hp;                    // 몬스터 체력.
+    [SerializeField] private int damage;                // 몬스터 공격력
 
-    private int spawnPath;      // 주어진 path 경로
+    [Header("Monster Part")]
+    [SerializeField]
+    private List<GameObject> monsterParts;
 
     private void Start()
     {
@@ -44,4 +51,7 @@ public class MonsterController : MonoBehaviour
             }
         }
     }
+
+    public void SetID(int _id) { id = _id; }
+    public int GetID() { return id; }
 }

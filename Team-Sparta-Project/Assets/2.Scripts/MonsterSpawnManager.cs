@@ -2,19 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterSpawner : MonoBehaviour
+public class MonsterSpawnManager : MonoBehaviour
 {
     // 몬스터 소환 스크립트
 
     [SerializeField]
-    private float spawnTime;
+    private Transform spawnPos;
     [SerializeField]
-    private GameObject monsterPrefab;
+    private float spawnTime;
 
     private float curTime;
-
-    // 몬스터 오브젝트를 관리할 리스트
-    private List<GameObject> monsterList = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -35,13 +32,24 @@ public class MonsterSpawner : MonoBehaviour
             // 특정 주기 동안 몬스터 소환
             yield return new WaitForSeconds(spawnTime);
 
-            var monster = Instantiate(monsterPrefab, this.transform.position, Quaternion.identity);   // 몬스터 소환
-
-            if(monster != null)
-            {
-                MonsterPathManager.Instance.SetMonsterPath(monster);
-            }
+            SpawnMonsterPoint();
         }
+    }
+
+    private void SpawnMonsterPoint()
+    {
+        GameObject monster = MonsterPoolManager.Instance.GetMonsterFromPool();
+
+        if (monster == null)
+        {
+            Debug.Log("There are no objects available!");
+        }
+
+        // 위치 설정
+        monster.transform.position = spawnPos.position;
+
+        // 경로 설정
+        MonsterPathManager.Instance.SetMonsterPath(monster);
     }
 
     private void SetMonsterType()
