@@ -8,19 +8,15 @@ public class MonsterController : MonoBehaviour
 
     // 몬스터 정보
     [Header("Monster Info")]
-    [SerializeField] private int id;                            // 몬스터 id
-    [SerializeField] private string title;                      // 몬스터 타이틀
-    [SerializeField] private int level;                         // 몬스터 레벨
-    [SerializeField] private int spawnPath;                     // 몬스터 경로
-    [SerializeField] private float speed;                       // 몬스터 스피드
-    [SerializeField] private Vector3 moveDir;                   // 몬스터 이동 방향
-    [SerializeField] private int hp;                            // 몬스터 체력.
-    [SerializeField] private int damage;                        // 몬스터 공격력
-    [SerializeField] private List<SpriteRenderer> sprites;      // 몬스터 이미지
-
-    [Header("Monster Part")]
-    [SerializeField]
-    private List<GameObject> monsterParts;
+    [SerializeField] private int id;                                // 몬스터 id
+    [SerializeField] private string title;                          // 몬스터 타이틀
+    [SerializeField] private int level;                             // 몬스터 레벨
+    [SerializeField] private int spawnPath;                         // 몬스터 경로
+    [SerializeField] private float speed;                           // 몬스터 스피드
+    [SerializeField] private Vector3 moveDir;                       // 몬스터 이동 방향
+    [SerializeField] private int hp;                                // 몬스터 체력.
+    [SerializeField] private int damage;                            // 몬스터 공격력
+    [SerializeField] private List<SpriteRenderer> spriteRenderers;  // 몬스터 이미지
 
     private void Start()
     {
@@ -57,10 +53,20 @@ public class MonsterController : MonoBehaviour
     public int GetID() { return id; }
     public void SetSprites(List<Sprite> _sprites)
     {
-        for(int i=0; i< _sprites.Count; i++)
+        if (this.spriteRenderers.Count == 0) { Debug.LogError("SetSprites: This list does not exist!"); }
+
+        for (int i=0; i< _sprites.Count; i++)
         {
-            this.sprites[i].sprite = _sprites[i];
+            this.spriteRenderers[i].sprite = _sprites[i];
         }
     }
     public void SetInfo(int _id, string _title, int _level, int _hp, int _damage, float _speed) { id = _id; title = _title; level = _level; hp = _hp; damage = _damage; speed = _speed; }
+
+    public void AddOrderLayer(int amount)
+    {
+        foreach(SpriteRenderer render in spriteRenderers)
+        {
+            render.sortingOrder += amount;
+        }
+    }
 }

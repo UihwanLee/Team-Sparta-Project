@@ -67,36 +67,37 @@ public class MonsterPathManager : MonoBehaviour
         // 몬스터 경로 설정
 
         // 경로 3개 중 1개를 랜덤으로 선택
-        int randomPathIndex = Random.Range(0, 3);
+        int path = Random.Range(0, 3);
 
         Collider2D myCollider = monster.GetComponent<Collider2D>();
         Collider2D[] collider1 = null;
         Collider2D[] collider2 = null;
 
         // 경로 선택
-        switch (randomPathIndex)
+        switch (path)
         {
             case 0:  // Path1 선택
-                collider1 = pathColliders[0];
-                collider2 = pathColliders[1];
+                collider1 = pathColliders[1];
+                collider2 = pathColliders[2];
                 monster.layer = LayerMask.NameToLayer("Monster Path1");
                 break;
 
             case 1:  // Path2 선택
-                collider1 = pathColliders[1];
+                collider1 = pathColliders[0];
                 collider2 = pathColliders[2];
                 monster.layer = LayerMask.NameToLayer("Monster Path2");
                 break;
 
             case 2:  // Path3 선택
-                collider1 = pathColliders[2];
-                collider2 = pathColliders[0];
+                collider1 = pathColliders[0];
+                collider2 = pathColliders[1];
                 monster.layer = LayerMask.NameToLayer("Monster Path3");
                 break;
         }
 
         // 몬스터에게 경로 전달
         MonsterController monsterController = monster.GetComponent<MonsterController>();
-        monsterController.SetPath(randomPathIndex, myCollider, collider1, collider2);
+        monsterController.SetPath(path, myCollider, collider1, collider2);
+        monsterController.AddOrderLayer((4-path)*10);
     }
 }

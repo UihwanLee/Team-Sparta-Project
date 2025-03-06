@@ -52,14 +52,4 @@ public class MonsterSpawnManager : MonoBehaviour
         // 경로 설정
         MonsterPathManager.Instance.SetMonsterPath(monster);
     }
-
-    private void SetMonsterType()
-    {
-        // 몬스터 타입 설정
-    }
-
-    private void SetMonsterLayer()
-    {
-        // 몬스터 레이아웃 설정
-    }
 }
