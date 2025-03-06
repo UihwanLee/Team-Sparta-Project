@@ -17,17 +17,17 @@ public class MonsterSpawner : MonoBehaviour
     void Start()
     {
         curTime = spawnTime;
+        StartCoroutine(SpawnMonsters());
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator SpawnMonsters()
     {
-        curTime -= Time.deltaTime;
-
-        if(curTime < 0)
+        while (true)
         {
+            // 특정 주기 동안 몬스터 소환
+            yield return new WaitForSeconds(spawnTime);
+
             Instantiate(monsterPrefab, this.transform.position, Quaternion.identity);   // 몬스터 소환
-            curTime = spawnTime;
         }
     }
 }
