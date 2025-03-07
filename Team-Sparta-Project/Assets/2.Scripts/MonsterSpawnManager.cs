@@ -43,7 +43,8 @@ public class MonsterSpawnManager : MonoBehaviour
 
         if (monster == null)
         {
-            Debug.LogError("There are no objects available!");
+            //Debug.LogError("There are no objects available!");
+            return;
         }
 
         // 위치 설정

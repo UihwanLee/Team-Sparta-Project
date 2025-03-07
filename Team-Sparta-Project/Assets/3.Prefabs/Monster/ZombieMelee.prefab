@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1174570720321624928}
   - component: {fileID: 7016750400611631704}
-  - component: {fileID: 1716540783500443527}
+  - component: {fileID: 6914537618326079867}
   - component: {fileID: 5132572084958406433}
   - component: {fileID: 9129338409483520}
   m_Layer: 0
@@ -57,8 +57,8 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!61 &1716540783500443527
-BoxCollider2D:
+--- !u!70 &6914537618326079867
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -89,19 +89,9 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.15, y: 0.56}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.9, y: 1.32}
-  m_EdgeRadius: 0
+  m_Offset: {x: -0.14, y: 0.51}
+  m_Size: {x: 0.59, y: 1.02}
+  m_Direction: 0
 --- !u!50 &5132572084958406433
 Rigidbody2D:
   serializedVersion: 4
@@ -128,7 +118,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &9129338409483520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,7 +134,7 @@ MonoBehaviour:
   id: 0
   title: 
   level: 0
-  spawnPath: 0
+  layer: 
   speed: 0
   moveDir: {x: -1, y: 0, z: 0}
   hp: 0
@@ -156,6 +146,14 @@ MonoBehaviour:
   - {fileID: 6851911621866096364}
   - {fileID: 7928511827763145290}
   - {fileID: 4391178048448326450}
+  isMonsterAround: 0
+  jumpForce: 5
+  isJumping: 0
+  myCollider: {fileID: 0}
+  climbHeight: 2.5
+  slideSpeed: 1
+  isClimbing: 0
+  isSliding: 0
 --- !u!1 &2094693183665648150
 GameObject:
   m_ObjectHideFlags: 0
