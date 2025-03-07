@@ -59,7 +59,7 @@ public class Sequence : Node
 
             if (result == NodeState.FAIL)
             {
-                result = NodeState.FAIL;
+                return NodeState.FAIL;
             }
             else if(result == NodeState.RUNNING)
             {
