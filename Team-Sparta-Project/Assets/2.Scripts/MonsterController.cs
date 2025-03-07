@@ -43,36 +43,6 @@ public class MonsterController : MonoBehaviour
         //InitBehaviorTree();
     }
 
-    //private void InitBehaviorTree()
-    //{
-    //    root = new Selector();
-    //    Sequence actionSequence = new Sequence();
-    //    Sequence jumpSequence = new Sequence();
-    //    Sequence attackSequence = new Sequence();
-    //    Sequence chaseSequence = new Sequence();
-
-    //    Condition isPlayerAround = new Condition(IsPlayerAround);
-    //    Condition isMonsterAround = new Condition(IsMonsterAround);
-
-    //    Action jumpAction = new Action(TryJumping);
-    //    Action attackAction = new Action(Attack);
-    //    Action chaseAction = new Action(Chase);
-
-    //    root.AddChild(actionSequence);
-    //    root.AddChild(chaseSequence);
-
-    //    actionSequence.AddChild(jumpSequence);
-    //    actionSequence.AddChild(attackSequence);
-    //    chaseSequence.AddChild(chaseAction);
-
-    //    jumpSequence.AddChild(isMonsterAround);
-    //    jumpSequence.AddChild(jumpAction);
-    //    attackSequence.AddChild(isPlayerAround);
-    //    attackSequence.AddChild(attackAction);
-
-    //    root.Run();
-    //}
-
     private void Update()
     {
         // BehaviorTree 동작
@@ -98,7 +68,6 @@ public class MonsterController : MonoBehaviour
     // 미끄러지는 동작
     void Sliding()
     {
-        // 충돌 시 뒤에 있는 몬스터가 밀려날 수 있도록 속도를 설정할 수 있음
         rb.velocity = new Vector2(3.0f, rb.velocity.y);
     }
 
@@ -233,6 +202,36 @@ public class MonsterController : MonoBehaviour
             render.sortingOrder += amount;
         }
     }
+
+    //private void InitBehaviorTree()
+    //{
+    //    root = new Selector();
+    //    Sequence actionSequence = new Sequence();
+    //    Sequence jumpSequence = new Sequence();
+    //    Sequence attackSequence = new Sequence();
+    //    Sequence chaseSequence = new Sequence();
+
+    //    Condition isPlayerAround = new Condition(IsPlayerAround);
+    //    Condition isMonsterAround = new Condition(IsMonsterAround);
+
+    //    Action jumpAction = new Action(TryJumping);
+    //    Action attackAction = new Action(Attack);
+    //    Action chaseAction = new Action(Chase);
+
+    //    root.AddChild(actionSequence);
+    //    root.AddChild(chaseSequence);
+
+    //    actionSequence.AddChild(jumpSequence);
+    //    actionSequence.AddChild(attackSequence);
+    //    chaseSequence.AddChild(chaseAction);
+
+    //    jumpSequence.AddChild(isMonsterAround);
+    //    jumpSequence.AddChild(jumpAction);
+    //    attackSequence.AddChild(isPlayerAround);
+    //    attackSequence.AddChild(attackAction);
+
+    //    root.Run();
+    //}
 
     //private NodeState TryJumping()
     //{
