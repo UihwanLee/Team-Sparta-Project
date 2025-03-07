@@ -90,34 +90,34 @@ public class MonsterPathManager : MonoBehaviour
         Collider2D[] collider2 = null;
 
         // 경로 선택
-        //switch (path)
-        //{
-        //    case 0:  // Path1 선택
-        //        collider1 = pathColliders[1];
-        //        collider2 = pathColliders[2];
-        //        pathLayer = PathLayer.PATH_1;
-        //        monster.layer = LayerMask.NameToLayer(PathLayer.PATH_1);
-        //        break;
+        switch (path)
+        {
+            case 0:  // Path1 선택
+                collider1 = pathColliders[1];
+                collider2 = pathColliders[2];
+                pathLayer = PathLayer.PATH_1;
+                monster.layer = LayerMask.NameToLayer(PathLayer.PATH_1);
+                break;
 
-        //    case 1:  // Path2 선택
-        //        collider1 = pathColliders[0];
-        //        collider2 = pathColliders[2];
-        //        pathLayer = PathLayer.PATH_2;
-        //        monster.layer = LayerMask.NameToLayer(PathLayer.PATH_2);
-        //        break;
+            case 1:  // Path2 선택
+                collider1 = pathColliders[0];
+                collider2 = pathColliders[2];
+                pathLayer = PathLayer.PATH_2;
+                monster.layer = LayerMask.NameToLayer(PathLayer.PATH_2);
+                break;
 
-        //    case 2:  // Path3 선택
-        //        collider1 = pathColliders[0];
-        //        collider2 = pathColliders[1];
-        //        pathLayer = PathLayer.PATH_3;
-        //        monster.layer = LayerMask.NameToLayer(PathLayer.PATH_3);
-        //        break;
-        //}
+            case 2:  // Path3 선택
+                collider1 = pathColliders[0];
+                collider2 = pathColliders[1];
+                pathLayer = PathLayer.PATH_3;
+                monster.layer = LayerMask.NameToLayer(PathLayer.PATH_3);
+                break;
+        }
 
-        collider1 = pathColliders[1];
-        collider2 = pathColliders[2];
-        pathLayer = PathLayer.PATH_1;
-        monster.layer = LayerMask.NameToLayer(PathLayer.PATH_1);
+        //collider1 = pathColliders[1];
+        //collider2 = pathColliders[2];
+        //pathLayer = PathLayer.PATH_1;
+        //monster.layer = LayerMask.NameToLayer(PathLayer.PATH_1);
 
         // 몬스터에게 경로 전달
         MonsterController monsterController = monster.GetComponent<MonsterController>();

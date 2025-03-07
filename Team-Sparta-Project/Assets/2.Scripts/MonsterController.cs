@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MonsterController : MonoBehaviour
 {
@@ -11,12 +13,14 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private int id;                                // 몬스터 id
     [SerializeField] private string title;                          // 몬스터 타이틀
     [SerializeField] private int level;                             // 몬스터 레벨
-    [SerializeField] private string layer;                           // 몬스터 경로
+    [SerializeField] private string layer;                          // 몬스터 경로
     [SerializeField] private float speed;                           // 몬스터 스피드
     [SerializeField] private Vector3 moveDir;                       // 몬스터 이동 방향
     [SerializeField] private int hp;                                // 몬스터 체력.
     [SerializeField] private int damage;                            // 몬스터 공격력
     [SerializeField] private List<SpriteRenderer> spriteRenderers;  // 몬스터 이미지
+
+    [SerializeField] private int pathLevel;                        // 몬스터 경로 레벨
 
     [Header("Monster BT")]
     [SerializeField] private Selector root;
@@ -24,10 +28,8 @@ public class MonsterController : MonoBehaviour
 
     [Header("Monster Physics")]
     private Rigidbody2D rb;
-    [SerializeField] public float jumpForce = 5f;
+    [SerializeField] public float jumpForce = 5.0f;
     [SerializeField] private bool isJumping = false;
-    [SerializeField] Collider2D myCollider;
-    Collider2D[] hitColliders;
 
     public float climbHeight = 4.0f;      // 올라갈 높이
     public float slideSpeed = 1f;       // 미끄러지는 속도
@@ -74,48 +76,30 @@ public class MonsterController : MonoBehaviour
     private void Update()
     {
         // BehaviorTree 동작
-        if(isSliding)
+        if (isSliding)
         {
-            SlideDown();
+            Sliding();
         }
         else if (isClimbing)
         {
-            if(isJumping==false) ClimbUp();
+            if (isJumping == false) ClimbUp();
         }
         else
         {
             Moving();
         }
-        //root.Run();
     }
 
     void Moving()
     {
-        //if(isSliding) { Debug.Log("위에 누가 있음!"); }
         transform.position += moveDir * speed * Time.deltaTime;
-        //Vector2 moveDirection = Vector2.left;  // 왼쪽으로 이동
-        //rb.velocity = new Vector2(moveDirection.x * speed, rb.velocity.y);
     }
 
     // 미끄러지는 동작
-    void SlideDown()
+    void Sliding()
     {
         // 충돌 시 뒤에 있는 몬스터가 밀려날 수 있도록 속도를 설정할 수 있음
-        //transform.position += moveDir * speed * -0.1f * Time.deltaTime;
-
-        StartCoroutine(SlideDownCoroutine());
-
-        //Vector2 pushDirection = Vector2.right;
-        //rb.AddForce(pushDirection * speed, ForceMode2D.Force);
-    }
-
-    private IEnumerator SlideDownCoroutine()
-    {
-        rb.velocity = new Vector2(1.0f, rb.velocity.y);
-
-        yield return new WaitForSeconds(1.0f); // 밀리는 시간
-
-        isSliding = false;
+        rb.velocity = new Vector2(3.0f, rb.velocity.y);
     }
 
     // 올라가는 동작
@@ -128,8 +112,9 @@ public class MonsterController : MonoBehaviour
     {
         isJumping = true;
 
-        // 점프할 동안 몬스터 간 충돌 무시
-        hitColliders = Physics2D.OverlapCircleAll(transform.position, 1.5f, LayerMask.NameToLayer(layer));
+        transform.position += moveDir * speed * Time.deltaTime;
+
+        yield return new WaitForSeconds(0.5f); // 점프 유지 시간
 
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
 
@@ -137,14 +122,14 @@ public class MonsterController : MonoBehaviour
 
         isClimbing = false;
 
-        yield return new WaitForSeconds(5.0f); // 쿨타임
+        yield return new WaitForSeconds(3.0f); // 쿨타임
 
         isJumping = false; // 점프가 끝나면 다시 점프 가능
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if(collision.gameObject.layer == LayerMask.NameToLayer(layer))
+        if (collision.gameObject.layer == LayerMask.NameToLayer(layer))
         {
             int hitCondition = GetHitPosition(collision);
 
@@ -175,9 +160,10 @@ public class MonsterController : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer(layer))
         {
-            //Debug.Log("벗어남");
-
-            //if (isSliding) isSliding = false; 
+            if(collision.transform.position.y > transform.position.y)
+            {
+                isSliding = false;
+            }
         }
     }
 
@@ -188,20 +174,9 @@ public class MonsterController : MonoBehaviour
         float myX = transform.position.x;
         float myY = transform.position.y;
 
-        //if(otherMonsterY - myY > 0) Debug.Log(otherMonsterY - myY);
-
-        if (otherMonsterY - myY > 1.0f)
-        {
-            return 0;
-        }
-        else if(myX - otherMonsterX > 0.5f)
-        {
-            return 1;
-        }
-        else
-        {
-            return -1;
-        }
+        if (otherMonsterY - myY > 1.0f) return 0;
+        else if(myX - otherMonsterX > 0.5f) return 1;
+        else return -1;
     }
 
     public void SetPath(string myLayer, Collider2D _collider, Collider2D[] ignorePath1, Collider2D[] ignorePath2)
