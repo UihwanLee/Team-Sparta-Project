@@ -1788,7 +1788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPos: {fileID: 1412555496}
-  spawnTime: 3
+  spawnTime: 1
 --- !u!1 &2004763862 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8958240697474582917, guid: 39e73014526a04149a4b4bff2302893b, type: 3}
