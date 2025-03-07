@@ -56,6 +56,7 @@ public class Sequence : Node
         foreach (Node node in childern)
         {
             NodeState result = node.Run();
+
             if (result == NodeState.FAIL)
             {
                 result = NodeState.FAIL;
