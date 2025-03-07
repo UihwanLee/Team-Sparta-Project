@@ -18,15 +18,77 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private int damage;                            // 몬스터 공격력
     [SerializeField] private List<SpriteRenderer> spriteRenderers;  // 몬스터 이미지
 
+    [Header("Monster BT")]
+    [SerializeField] private Selector root;
+
     private void Start()
     {
+        InitBehaviorTree();
+    }
 
+    private void InitBehaviorTree()
+    {
+        root = new Selector();
+        Sequence actionSequence = new Sequence();
+        Sequence jumpSequence = new Sequence();
+        Sequence attackSequence = new Sequence();
+        Sequence chaseSequence = new Sequence();
+
+        Condition isPlayerAround = new Condition(IsPlayerAround);
+        Condition isMonsterAround = new Condition(IsMonsterAround);
+
+        Action jumpAction = new Action(Jumping);
+        Action attackAction = new Action(Attack);
+        Action chaseAction = new Action(Chase);
+
+        root.AddChild(actionSequence);
+        root.AddChild(chaseSequence);
+
+        actionSequence.AddChild(jumpSequence);
+        actionSequence.AddChild(attackSequence);
+        chaseSequence.AddChild(chaseAction);
+
+        jumpSequence.AddChild(isMonsterAround);
+        jumpSequence.AddChild(jumpAction);
+        attackSequence.AddChild(isPlayerAround);
+        attackSequence.AddChild(attackAction);
+
+        root.Run();
     }
 
     private void Update()
     {
-        // 소환될 시 기본적으로 옆으로 이동
+        // BehaviorTree 동작
+        root.Run();
+    }
+
+    private NodeState Jumping()
+    {
+        Debug.Log("Jummping!");
+        return NodeState.SUCCESS;
+    }
+
+    private NodeState Attack()
+    {
+        Debug.Log("Attack Player!");
+        return NodeState.SUCCESS;
+    }
+
+    private NodeState Chase()
+    {
+        Debug.Log("Chase Player!");
         transform.position += moveDir * speed * Time.deltaTime;
+        return NodeState.SUCCESS;
+    }
+
+    private bool IsPlayerAround()
+    {
+        return false;
+    }
+    
+    private bool IsMonsterAround()
+    {
+        return false;
     }
 
     public void SetPath(int myPath, Collider2D myCollider, Collider2D[] ignorePath1, Collider2D[] ignorePath2)
