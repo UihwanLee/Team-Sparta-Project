@@ -9,6 +9,7 @@ TagManager:
   - Path_2
   - Path_3
   - Box
+  - Truck
   layers:
   - Default
   - TransparentFX

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 9129338409483520}
   m_Layer: 0
   m_Name: ZombieMelee
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,6 +151,9 @@ MonoBehaviour:
   isJumping: 0
   isClimbing: 0
   isSliding: 0
+  isAttacking: 0
+  rb: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &2094693183665648150
 GameObject:
   m_ObjectHideFlags: 0

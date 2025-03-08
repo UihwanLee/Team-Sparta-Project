@@ -9,24 +9,24 @@ public class MovingWheel : MonoBehaviour
     [SerializeField] private float maxMoveSpeed;
     [SerializeField] private float moveRate;
     [SerializeField] private float moveSpeed;
-    private bool isDamage;
+    private bool isStuck;
 
     private void Awake()
     {
         maxMoveSpeed = GameData.Instance.WheelMaxMoveSpeed;
         moveRate = GameData.Instance.WheelMoveRate;
-        isDamage = false;
+        isStuck = false;
     }
 
     private void Update()
     {
-        CheckDamage();
+        CheckStuck();
         this.transform.Rotate(new Vector3(0f, 0f, -moveSpeed) * Time.deltaTime);
     }
 
-    private void CheckDamage()
+    private void CheckStuck()
     {
-        if (isDamage)
+        if (isStuck)
         {
             // 공격받고 있다면 서서히 감속
             moveSpeed = Mathf.Lerp(moveSpeed, 0.0f, moveRate * Time.deltaTime);
@@ -39,5 +39,5 @@ public class MovingWheel : MonoBehaviour
     }
 
 
-    public bool IsDamage { get { return isDamage; } set { isDamage = value; } }
+    public bool IsStuck { get { return isStuck; } set { isStuck = value; } }
 }
