@@ -846,7 +846,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0487b206f31ce9042bb473c813135809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 200
+  maxMoveSpeed: 200
+  moveSpeed: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1027,7 +1028,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0487b206f31ce9042bb473c813135809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 200
+  maxMoveSpeed: 200
+  moveSpeed: 0
 --- !u!1 &679450417
 GameObject:
   m_ObjectHideFlags: 0
@@ -1481,6 +1483,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecce4d2fdc6aba343abcd64a37ab0378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wheels:
+  - {fileID: 639653331}
+  - {fileID: 478636169}
   boxTrans: {fileID: 988428232}
   boxList: []
 --- !u!1 &1499112580
@@ -1847,7 +1852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPos: {fileID: 1412555496}
-  spawnTime: 1
+  spawnTime: 2
 --- !u!1 &2004763862 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8958240697474582917, guid: 39e73014526a04149a4b4bff2302893b, type: 3}

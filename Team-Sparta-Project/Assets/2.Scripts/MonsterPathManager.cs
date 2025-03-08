@@ -114,11 +114,6 @@ public class MonsterPathManager : MonoBehaviour
                 break;
         }
 
-        //collider1 = pathColliders[1];
-        //collider2 = pathColliders[2];
-        //pathLayer = PathLayer.PATH_1;
-        //monster.layer = LayerMask.NameToLayer(PathLayer.PATH_1);
-
         // 몬스터에게 경로 전달
         MonsterController monsterController = monster.GetComponent<MonsterController>();
         monsterController.SetPath(pathLayer, myCollider, collider1, collider2);

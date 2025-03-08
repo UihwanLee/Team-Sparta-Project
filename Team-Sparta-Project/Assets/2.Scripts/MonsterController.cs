@@ -91,7 +91,7 @@ public class MonsterController : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == BoxTag.boxTag)
+        if(collision.gameObject.tag == BoxData.boxTag)
         {
             TryAttack(collision.gameObject);
         }
@@ -107,7 +107,7 @@ public class MonsterController : MonoBehaviour
         Box box = _boxObj.GetComponent<Box>();
 
         // 공격이 가능할 시 공격
-        if(!isAttacking)
+        if(!isAttacking && box.IsDestroy() == false)
         {
             Attack(box);
         }
@@ -126,6 +126,7 @@ public class MonsterController : MonoBehaviour
 
         // 데미지 적용
         _box.Damage(this.damage);
+        _box.IsDamage = true;
 
         // 공격 애니메이션 실행
         anim.SetBool("IsAttacking", isAttacking);
@@ -133,6 +134,7 @@ public class MonsterController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         isAttacking = false;
+        _box.IsDamage = false;
         anim.SetBool("IsAttacking", isAttacking);
     }
 
@@ -213,8 +215,8 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-    public void SetID(int _id) { id = _id; }
-    public int GetID() { return id; }
+
+
     public void SetSprites(List<Sprite> _sprites)
     {
         if (this.spriteRenderers.Count == 0) { Debug.LogError("SetSprites: This list does not exist!"); }

@@ -16,7 +16,6 @@ public class Box : MonoBehaviour
     void Start()
     {
         hp = 100;
-        isDamage = false;
     }
 
     public void SetBoxSetting()
@@ -33,19 +32,18 @@ public class Box : MonoBehaviour
 
     public void Damage(int _dmg)
     {
+        // hp가 0 이하 시 파괴
+        if(hp - _dmg <= 0)
+        {
+            hp = 0;
+            Destroy();
+            return;
+        }
+
         // 공격 받는 모션
 
-
-        if(!isDestroy)
-        {
-            hp -= _dmg;
-
-            if(hp <= 0)
-            {
-                Destroy();
-                return;
-            }
-        }
+        // 데미지 적용
+        hp -= _dmg;
     }
 
     private void Destroy()
@@ -53,5 +51,9 @@ public class Box : MonoBehaviour
         isDestroy = true;
     }
 
-    public int GetHp() { return hp; }
+
+    public int Hp { get { return hp; } set { hp = value; }}
+
+    public bool IsDamage { get { return isDamage; } set { isDamage = value; } }
+    public bool IsDestroy() { return isDestroy; }
 }
