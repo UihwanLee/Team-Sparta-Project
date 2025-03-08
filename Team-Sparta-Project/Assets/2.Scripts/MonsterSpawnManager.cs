@@ -20,6 +20,7 @@ public class MonsterSpawnManager : MonoBehaviour
 
     private void InitMonster()
     {
+        spawnTime = GameData.Instance.MonsterSpawnTime;
         curTime = spawnTime;
     }
 

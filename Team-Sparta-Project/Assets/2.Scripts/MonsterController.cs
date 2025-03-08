@@ -32,7 +32,7 @@ public class MonsterController : MonoBehaviour
     [Header("Monster Animation")]
     [SerializeField] private Animator anim;
 
-    private void Start()
+    private void Awake()
     {
         InitValue();
     }
@@ -56,6 +56,8 @@ public class MonsterController : MonoBehaviour
         isAttacking = false;
 
         anim = GetComponent<Animator>();
+
+        jumpForce = GameData.Instance.MonsterJumpForce;
     }
 
     // 기본 동작
@@ -91,7 +93,7 @@ public class MonsterController : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == BoxData.boxTag)
+        if(collision.gameObject.tag == TagData.TAG_BOX)
         {
             TryAttack(collision.gameObject);
         }

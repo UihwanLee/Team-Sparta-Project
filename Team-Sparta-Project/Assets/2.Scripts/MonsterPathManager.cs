@@ -2,20 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class PathTag
-{
-    public const string PATH_1 = "Path_1";
-    public const string PATH_2 = "Path_2";
-    public const string PATH_3 = "Path_3";
-}
-
-public static class PathLayer
-{
-    public const string PATH_1 = "Monster Path1";
-    public const string PATH_2 = "Monster Path2";
-    public const string PATH_3 = "Monster Path3";
-}
-
 public class MonsterPathManager : MonoBehaviour
 {
     // 몬스터 경로 관리 스크립트
@@ -57,9 +43,9 @@ public class MonsterPathManager : MonoBehaviour
 
     private void InitPathColliders()
     {
-        GameObject[] path1Objects = GameObject.FindGameObjectsWithTag(PathTag.PATH_1);
-        GameObject[] path2Objects = GameObject.FindGameObjectsWithTag(PathTag.PATH_2);
-        GameObject[] path3Objects = GameObject.FindGameObjectsWithTag(PathTag.PATH_3);
+        GameObject[] path1Objects = GameObject.FindGameObjectsWithTag(TagData.TAG_PATH_1);
+        GameObject[] path2Objects = GameObject.FindGameObjectsWithTag(TagData.TAG_PATH_1);
+        GameObject[] path3Objects = GameObject.FindGameObjectsWithTag(TagData.TAG_PATH_1);
 
         pathColliders.Add(GetColliders(path1Objects));
         pathColliders.Add(GetColliders(path2Objects));
@@ -95,22 +81,22 @@ public class MonsterPathManager : MonoBehaviour
             case 0:  // Path1 선택
                 collider1 = pathColliders[1];
                 collider2 = pathColliders[2];
-                pathLayer = PathLayer.PATH_1;
-                monster.layer = LayerMask.NameToLayer(PathLayer.PATH_1);
+                pathLayer = LayerData.LAYER_PATH_1;
+                monster.layer = LayerMask.NameToLayer(LayerData.LAYER_PATH_1);
                 break;
 
             case 1:  // Path2 선택
                 collider1 = pathColliders[0];
                 collider2 = pathColliders[2];
-                pathLayer = PathLayer.PATH_2;
-                monster.layer = LayerMask.NameToLayer(PathLayer.PATH_2);
+                pathLayer = LayerData.LAYER_PATH_2;
+                monster.layer = LayerMask.NameToLayer(LayerData.LAYER_PATH_2);
                 break;
 
             case 2:  // Path3 선택
                 collider1 = pathColliders[0];
                 collider2 = pathColliders[1];
-                pathLayer = PathLayer.PATH_3;
-                monster.layer = LayerMask.NameToLayer(PathLayer.PATH_3);
+                pathLayer = LayerData.LAYER_PATH_3;
+                monster.layer = LayerMask.NameToLayer(LayerData.LAYER_PATH_3);
                 break;
         }
 
