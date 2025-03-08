@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private float bulletSpeed;              // ÃÑ¾Ë ¼Óµµ
+    [SerializeField] private float bulletSpeed;                 // ÃÑ¾Ë ¼Óµµ
+    [SerializeField] private int bulletDamage;                         // ÃÑ¾Ë µ¥¹ÌÁö
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private GunController gunController;
 
@@ -19,9 +20,10 @@ public class Bullet : MonoBehaviour
         rb = GetComponent<Rigidbody2D>(); 
     }
 
-    public void InitBullet(GunController _gunController, float _bulletSpeed)
+    public void InitBullet(GunController _gunController, float _bulletSpeed, int _bulletDamage)
     {
         bulletSpeed = _bulletSpeed;
+        bulletDamage = _bulletDamage;
         gunController = _gunController;
         this.gameObject.SetActive(false);
     }
@@ -53,4 +55,6 @@ public class Bullet : MonoBehaviour
 
         return false; 
     }
+
+    public int BulletDamage { get { return bulletDamage; } }
 }

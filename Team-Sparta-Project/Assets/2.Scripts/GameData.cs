@@ -8,6 +8,7 @@ public static class TagData
     public const string TAG_BOX = "Box";
     public const string TAG_TRUCK = "Truck";
     public const string TAG_MONSTER = "Monster";
+    public const string TAG_BULLET = "Bullet";
 
     public const string TAG_PATH_1 = "Path_1";
     public const string TAG_PATH_2 = "Path_2";
@@ -57,6 +58,7 @@ public class GameData : MonoBehaviour
 
     [Header("Hero")]
     [SerializeField] private int heroMaxHP = 100;                           // 히어로 최대체력
+    [SerializeField] private int heroDamage = 20;                           // 히어로 데미지
 
     [Header("Gun")]
     [SerializeField] private GameObject bulletPrefab;                       // 총알 프리팹
@@ -82,6 +84,7 @@ public class GameData : MonoBehaviour
 
     // hero
     public int HeroMaxHP { get { return heroMaxHP; } }
+    public int HeroDamage { get { return heroDamage; } }
 
     // Gun
     public GameObject BulletPrefab { get { return bulletPrefab; } }

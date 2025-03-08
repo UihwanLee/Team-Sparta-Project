@@ -16,18 +16,24 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private string layer;                          // 몬스터 경로
     [SerializeField] private float speed;                           // 몬스터 스피드
     [SerializeField] private Vector3 moveDir;                       // 몬스터 이동 방향
-    [SerializeField] private int hp;                                // 몬스터 체력.
+    [SerializeField] private int maxHp;                             // 몬스터 최대 체력
+    [SerializeField] private int hp;                                // 몬스터 체력
     [SerializeField] private int damage;                            // 몬스터 공격력
     [SerializeField] private List<SpriteRenderer> spriteRenderers;  // 몬스터 이미지
+    [SerializeField] private GameObject hpBar;                      // 몬스터 hp바
 
     [Header("Monster Physics")]
     [SerializeField] public float jumpForce;        // 점프 속도
     [SerializeField] public float slideSpeed;       // 미끄러지는 속도
+    [SerializeField] private Rigidbody2D rb;
+
+    [Header("Monster State")]
+    [SerializeField] private bool isDead;
+    [SerializeField] private bool isDamaged;
     [SerializeField] private bool isJumping;
     [SerializeField] private bool isClimbing;
     [SerializeField] private bool isSliding;
     [SerializeField] private bool isAttacking;
-    [SerializeField] private Rigidbody2D rb;
 
     [Header("Monster Animation")]
     [SerializeField] private Animator anim;
@@ -91,6 +97,16 @@ public class MonsterController : MonoBehaviour
         isJumping = false;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == TagData.TAG_BULLET)
+        {
+            // 총알 맞을 시 데미지를 입는다.
+            int bulletDamage = collision.gameObject.GetComponent<Bullet>().BulletDamage;
+            Damage(bulletDamage);
+        }
+    }
+
     private void OnCollisionStay2D(Collision2D collision)
     {
         if(collision.gameObject.tag == TagData.TAG_BOX || 
@@ -146,6 +162,71 @@ public class MonsterController : MonoBehaviour
 
         isAttacking = false;
         anim.SetBool("IsAttacking", isAttacking);
+    }
+
+    private void Damage(int _dmg)
+    {
+        // hp가 0 이하 시 파괴
+        if (hp - _dmg <= 0)
+        {
+            hp = 0;
+            Dead();
+            return;
+        }
+
+        // 공격 받는 모션
+        hpBar.SetActive(true);
+
+        // 데미지 적용
+        hp -= _dmg;
+        StartCoroutine(DamageEffect());
+
+        // Hp 슬라이더 업데이트
+        UpdateHpSlider();
+    }
+
+    private IEnumerator DamageEffect()
+    {
+        if (spriteRenderers.Count != 0)
+        {
+            foreach(SpriteRenderer spriteRenderer in spriteRenderers)
+            {
+                Color damageColor;
+                if (ColorUtility.TryParseHtmlString("#E0E0E0", out damageColor))
+                {
+                    spriteRenderer.color = damageColor;
+                    yield return new WaitForSeconds(0.1f);
+                    spriteRenderer.color = Color.white;
+                }
+            }
+        }
+    }
+
+    private void UpdateHpSlider()
+    {
+        if (hpBar != null)
+        {
+            Slider hpSlider = hpBar.GetComponentInChildren<Slider>();
+            hpSlider.value = (float)hp / maxHp; // HP 값을 0~1 범위로 변환
+        }
+    }
+
+    private void Dead()
+    {
+        isDead = true;
+
+        StartCoroutine(DeadCoroutine());    
+    }
+
+    private IEnumerator DeadCoroutine()
+    {
+        // 죽는 애니메이션 실행
+        anim.SetBool("IsDead", isDead);
+        
+        yield return new WaitForSeconds(2.0f);
+
+        // PoolManager에게 죽었다고 알림
+        MonsterPoolManager.Instance.ReturnMonsterToPool(this.level, this.id);
     }
 
     private void HandleCollision(Collision2D collision)
@@ -225,8 +306,6 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-
-
     public void SetSprites(List<Sprite> _sprites)
     {
         if (this.spriteRenderers.Count == 0) { Debug.LogError("SetSprites: This list does not exist!"); }
@@ -236,7 +315,7 @@ public class MonsterController : MonoBehaviour
             this.spriteRenderers[i].sprite = _sprites[i];
         }
     }
-    public void SetInfo(int _id, string _title, int _level, int _hp, int _damage, float _speed) { id = _id; title = _title; level = _level; hp = _hp; damage = _damage; speed = _speed; }
+    public void SetInfo(int _id, string _title, int _level, int _maxHp, int _damage, float _speed) { id = _id; title = _title; level = _level; maxHp = _maxHp; hp = _maxHp; damage = _damage; speed = _speed; }
 
     public void AddOrderLayer(int amount)
     {

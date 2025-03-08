@@ -180,9 +180,10 @@ GameObject:
   - component: {fileID: 1356582251097539837}
   - component: {fileID: 8783332185486538152}
   - component: {fileID: 3054012847658830233}
+  - component: {fileID: 1219845485965684105}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -239,7 +240,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.5
 --- !u!50 &8783332185486538152
 Rigidbody2D:
   serializedVersion: 4
@@ -279,6 +280,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c86f0d96f6c6b324589851e360a7a3df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletSpeed: 0
+  bulletDamage: 0
+  rb: {fileID: 0}
+  gunController: {fileID: 0}
+--- !u!95 &1219845485965684105
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5571540100461868937}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 77b1601465587584aaf57ddb9f01a656, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6135274908597083754
 GameObject:
   m_ObjectHideFlags: 0

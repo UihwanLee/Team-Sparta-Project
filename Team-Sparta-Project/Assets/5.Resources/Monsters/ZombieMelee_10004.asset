@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   level: 4
   title: ZombieMelee_10004
-  hp: 130
+  maxHp: 160
   damage: 25
   speed: 3
   sprites:

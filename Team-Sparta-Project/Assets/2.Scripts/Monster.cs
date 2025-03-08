@@ -7,7 +7,7 @@ public class Monster : ScriptableObject
 {
     public int level;
     public string title;
-    public int hp;
+    public int maxHp;
     public int damage;
     public float speed;
     public List<Sprite> sprites;

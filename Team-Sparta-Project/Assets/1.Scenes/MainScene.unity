@@ -1218,10 +1218,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroMaxHP: 100
+  heroDamage: 20
   bulletPrefab: {fileID: 5571540100461868937, guid: 88aa147da9fdd3b4c9f79e5a9d780117, type: 3}
   minGunRotation: -120
   maxGunRotation: 10
-  gunFireRate: 3
+  gunFireRate: 1
   gunMaxBullets: 10
   bulletSpeed: 10
   boxMaxHP: 2000

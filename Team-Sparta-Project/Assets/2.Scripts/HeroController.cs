@@ -19,25 +19,22 @@ public class HeroController : MonoBehaviour
     [SerializeField] private bool isDead;
 
     [SerializeField] private GameObject hpBar;                        // 히어로 hp바
+    [SerializeField] private GunController gunController;             // 총 컨트롤러
 
     public Slider hpSlider;
 
     // Start is called before the first frame update
     void Start()
     {
+        InitValue();
+    }
+
+    private void InitValue()
+    {
         maxHp = GameData.Instance.HeroMaxHP;
         hp = maxHp;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void Attack()
-    {
-
+        damage = GameData.Instance.HeroDamage;
     }
 
     public void Damage(int _dmg)

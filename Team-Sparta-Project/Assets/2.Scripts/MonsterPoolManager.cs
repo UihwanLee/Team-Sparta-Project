@@ -68,7 +68,7 @@ public class MonsterPoolManager : MonoBehaviour
             {
                 monsterList[i] = Instantiate(monsterPrefab, Vector3.zero, Quaternion.identity);
 
-                monsterList[i].GetComponent<MonsterController>().SetInfo(i, monster.title, monster.level, monster.hp, monster.damage, monster.speed);
+                monsterList[i].GetComponent<MonsterController>().SetInfo(i, monster.title, monster.level, monster.maxHp, monster.damage, monster.speed);
                 monsterList[i].GetComponent<MonsterController>().SetSprites(monster.sprites);
                 monsterList[i].SetActive(false);
             }
@@ -103,7 +103,7 @@ public class MonsterPoolManager : MonoBehaviour
         return monsterList[_id];
     }
 
-    public void ReleaseMonsterFromPool(int _level, int _id)
+    public void ReturnMonsterToPool(int _level, int _id)
     {
         GameObject[] monsterList = monsterPoolList[_level];
         if (monsterList == null) { Debug.LogError("That monster list does not exist!"); return; }

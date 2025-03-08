@@ -12,6 +12,7 @@ public class GunController : MonoBehaviour
     [SerializeField] private int maxBullets;            // 최대 총알 개수
     [SerializeField] private float bulletSpeed;         // 총알 스피드
     [SerializeField] private Transform gunMuzzle;       // 총알 총구 위치
+    [SerializeField] private int bulletDamage;          // 총알 데미지
 
     [SerializeField] private List<GameObject> bulletList;  // 오브젝트 풀
 
@@ -29,6 +30,7 @@ public class GunController : MonoBehaviour
         fireRate = GameData.Instance.GunFireRate;
         maxBullets = GameData.Instance.GunMaxBullets;
         bulletSpeed = GameData.Instance.BulletSpeed;
+        bulletDamage = GameData.Instance.HeroDamage;
     }
 
     private void InitBullet()
@@ -42,7 +44,7 @@ public class GunController : MonoBehaviour
             GameObject bullet = Instantiate(bulletPrefab, gunMuzzle.position, Quaternion.identity);
             bullet.SetActive(false);  
             Bullet bulletScript = bullet.GetComponent<Bullet>();
-            bulletScript.InitBullet(this, bulletSpeed); 
+            bulletScript.InitBullet(this, bulletSpeed, bulletDamage); 
             bulletList.Add(bullet);
         }
     }
@@ -118,8 +120,8 @@ public class GunController : MonoBehaviour
         return null;
     }
 
-    public void ReturnBulletToPool(GameObject bullet)
+    public void ReturnBulletToPool(GameObject _bullet)
     {
-        bullet.SetActive(false); // 총알을 비활성화하여 풀에 반환
+        _bullet.SetActive(false); // 총알을 비활성화하여 풀에 반환
     }
 }
