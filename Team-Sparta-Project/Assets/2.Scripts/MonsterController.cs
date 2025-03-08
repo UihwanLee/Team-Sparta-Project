@@ -93,7 +93,8 @@ public class MonsterController : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == TagData.TAG_BOX)
+        if(collision.gameObject.tag == TagData.TAG_BOX || 
+            collision.gameObject.tag == TagData.HERO)
         {
             TryAttack(collision.gameObject);
         }
@@ -104,29 +105,39 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-    private void TryAttack(GameObject _boxObj)
+    private void TryAttack(GameObject _obj)
     { 
-        Box box = _boxObj.GetComponent<Box>();
-
         // 공격이 가능할 시 공격
-        if(!isAttacking && box.IsDestroy() == false)
+        if(!isAttacking)
         {
-            Attack(box);
+            Attack(_obj);
         }
     }
 
-    private void Attack(Box _box)
+    private void Attack(GameObject _obj)
     {
-        StartCoroutine(AttackCoroutine(_box));
+        StartCoroutine(AttackCoroutine(_obj));
     }
 
-    private IEnumerator AttackCoroutine(Box _box)
+    private IEnumerator AttackCoroutine(GameObject _obj)
     { 
         isAttacking = true;
 
-        // 데미지 적용
-        _box.Damage(damage);
-        _box.IsDamage = true;
+        // 데미지 적용 주체 판별
+        if(_obj.tag == TagData.TAG_BOX)
+        {
+            Box box = _obj.GetComponent<Box>();
+            box.Damage(damage); box.IsDamage = true;
+        }
+        else if (_obj.tag == TagData.HERO)
+        {
+            HeroController heroController = _obj.GetComponent<HeroController>();
+            heroController.Damage(damage); heroController.IsDamage = true;
+        }
+        else
+        {
+            Debug.LogError("This are no conflct");
+        }
 
         // 공격 애니메이션 실행
         anim.SetBool("IsAttacking", isAttacking);
@@ -134,7 +145,6 @@ public class MonsterController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         isAttacking = false;
-        _box.IsDamage = false;
         anim.SetBool("IsAttacking", isAttacking);
     }
 

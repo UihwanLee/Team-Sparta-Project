@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class TagData
 {
+    public const string HERO = "Hero";
     public const string TAG_BOX = "Box";
     public const string TAG_TRUCK = "Truck";
     public const string TAG_MONSTER = "Monster";
@@ -54,8 +55,12 @@ public class GameData : MonoBehaviour
         }
     }
 
+    [Header("Hero")]
+    [SerializeField] private int heroMaxHP = 100;
+    public int HeroMaxHP { get { return heroMaxHP; } }
+
     [Header("TruckManager")]
-    [SerializeField] private int boxMaxHP = 2000;
+    [SerializeField] private int boxMaxHP = 100;
     [SerializeField] private float boxDropSpeed = 1000.0f;
     public int BoxMaxHP { get { return boxMaxHP; } }
     public float BoxDropSpeed { get { return boxDropSpeed; } }
