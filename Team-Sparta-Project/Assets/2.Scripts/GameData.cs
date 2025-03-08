@@ -57,7 +57,11 @@ public class GameData : MonoBehaviour
 
     [Header("Hero")]
     [SerializeField] private int heroMaxHP = 100;
+    [SerializeField] private float minGunRotation = -100.0f;
+    [SerializeField] private float maxGunRotation = 10.0f;
     public int HeroMaxHP { get { return heroMaxHP; } }
+    public float MinGunRotation { get { return minGunRotation; } }
+    public float MaxGunRotation { get { return maxGunRotation; } }
 
     [Header("TruckManager")]
     [SerializeField] private int boxMaxHP = 100;
