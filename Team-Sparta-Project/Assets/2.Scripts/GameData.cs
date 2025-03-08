@@ -56,30 +56,52 @@ public class GameData : MonoBehaviour
     }
 
     [Header("Hero")]
-    [SerializeField] private int heroMaxHP = 100;
-    [SerializeField] private float minGunRotation = -100.0f;
-    [SerializeField] private float maxGunRotation = 10.0f;
+    [SerializeField] private int heroMaxHP = 100;                           // 히어로 최대체력
+
+    [Header("Gun")]
+    [SerializeField] private GameObject bulletPrefab;                       // 총알 프리팹
+    [SerializeField] private float minGunRotation = -100.0f;                // 총 최소 각도
+    [SerializeField] private float maxGunRotation = 10.0f;                  // 총 최대 각도
+    [SerializeField] private float gunFireRate = 0.2f;                      // 총알 발사 간격
+    [SerializeField] private int gunMaxBullets = 10;                        // 최대 총알 개수
+   
+    [Header("TruckManager")]
+    [SerializeField] private int boxMaxHP = 100;                            // Box 최대 체력
+    [SerializeField] private float boxDropSpeed = 1000.0f;                  // Box drop 속도
+
+    [Header("Monster")]
+    [SerializeField] private List<Monster> monsterDataList;                 // Monster 리스트
+    [SerializeField] private GameObject monsterPrefab;                      // Monster 프리팹
+    [SerializeField] private float monsterSpawnTime = 3.0f;                 // Monster 스폰 시간
+    [SerializeField] public float monsterJumpForce = 5.0f;                  // Monster 점프 속도
+
+    [Header("MovingWheel")]
+    [SerializeField] private float wheelMaxMoveSpeed = 200.0f;              // 트럭 바퀴 최대 속도
+    [SerializeField] private float wheelMoveRate = 1.0f;                    // 트럭 바퀴 가속도
+
+    // hero
     public int HeroMaxHP { get { return heroMaxHP; } }
+
+    // Gun
+    public GameObject BulletPrefab { get { return bulletPrefab; } }
     public float MinGunRotation { get { return minGunRotation; } }
     public float MaxGunRotation { get { return maxGunRotation; } }
+    public float GunFireRate { get { return gunFireRate; } }
+    public int GunMaxBullets { get { return gunMaxBullets; } }
 
-    [Header("TruckManager")]
-    [SerializeField] private int boxMaxHP = 100;
-    [SerializeField] private float boxDropSpeed = 1000.0f;
+    // TruckManager
     public int BoxMaxHP { get { return boxMaxHP; } }
     public float BoxDropSpeed { get { return boxDropSpeed; } }
 
-    [Header("MonsterSpawnManager")]
-    [SerializeField] private float monsterSpawnTime = 3.0f;
+    // Monster
+    public List<Monster> MonsterDataList { get { return monsterDataList; } }
+    public GameObject MonsterPrefab { get { return monsterPrefab; } }
+    public float MonsterJumpForce { get { return monsterJumpForce; } }
     public float MonsterSpawnTime { get { return monsterSpawnTime; } }
 
-    [Header("Monster")]
-    [SerializeField] public float monsterJumpForce = 5.0f;
-    public float MonsterJumpForce { get { return monsterJumpForce; } }
-
-    [Header("MovingWheel")]
-    [SerializeField] private float wheelMaxMoveSpeed = 200.0f;
-    [SerializeField] private float wheelMoveRate = 1.0f;
-    public float WheelMaxMoveSpeed { get { return wheelMaxMoveSpeed; }}
+    // Background & Wheel
+    public float WheelMaxMoveSpeed { get { return wheelMaxMoveSpeed; } }
     public float WheelMoveRate { get { return wheelMoveRate; } }
+
+
 }

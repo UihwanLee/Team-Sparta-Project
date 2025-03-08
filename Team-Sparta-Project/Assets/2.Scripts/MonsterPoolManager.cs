@@ -38,7 +38,7 @@ public class MonsterPoolManager : MonoBehaviour
     }
 
     // 소환할 몬스터 종류
-    [SerializeField] private List<Monster> monsters;
+    [SerializeField] private List<Monster> monsterDataList;
     [SerializeField] private GameObject monsterPrefab;
 
     // 몬스터 오브젝트를 관리할 리스트
@@ -46,13 +46,20 @@ public class MonsterPoolManager : MonoBehaviour
 
     private void Start()
     {
+        InitValue();
         InitMonsterPoolList();
+    }
+
+    private void InitValue()
+    {
+        monsterDataList = GameData.Instance.MonsterDataList;
+        monsterPrefab = GameData.Instance.MonsterPrefab;
     }
 
     private void InitMonsterPoolList()
     {
         // 몬스터 타입 별 리스트 초기화
-        foreach(Monster monster in monsters)
+        foreach(Monster monster in monsterDataList)
         {
             GameObject[] monsterList = new GameObject[monster.maxCount];
 

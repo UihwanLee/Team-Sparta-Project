@@ -438,11 +438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72f74fbfa2b888849a975aa279b81bcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsters:
-  - {fileID: 11400000, guid: 866031e4a43a86941aa4413ede2a4b5b, type: 2}
-  - {fileID: 11400000, guid: da2d40fba881af14b97e6d085fcb4130, type: 2}
-  - {fileID: 11400000, guid: 5960cc19636320b4f839f9ff993c2b49, type: 2}
-  - {fileID: 11400000, guid: c5e78d4cad2c2c340a4cde0b40dfad69, type: 2}
+  monsterDataList: []
   monsterPrefab: {fileID: 319310827380095937, guid: e48e7c461a85c463cba5a999afb91a67, type: 3}
 --- !u!1 &315804141
 GameObject:
@@ -1222,10 +1218,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroMaxHP: 100
+  bulletPrefab: {fileID: 5571540100461868937, guid: 88aa147da9fdd3b4c9f79e5a9d780117, type: 3}
   minGunRotation: -100
   maxGunRotation: 10
+  gunFireRate: 0.2
+  gunMaxBullets: 10
   boxMaxHP: 2000
   boxDropSpeed: 1000
+  monsterDataList:
+  - {fileID: 11400000, guid: 866031e4a43a86941aa4413ede2a4b5b, type: 2}
+  - {fileID: 11400000, guid: da2d40fba881af14b97e6d085fcb4130, type: 2}
+  - {fileID: 11400000, guid: 5960cc19636320b4f839f9ff993c2b49, type: 2}
+  - {fileID: 11400000, guid: c5e78d4cad2c2c340a4cde0b40dfad69, type: 2}
+  monsterPrefab: {fileID: 319310827380095937, guid: e48e7c461a85c463cba5a999afb91a67, type: 3}
   monsterSpawnTime: 3
   monsterJumpForce: 5
   wheelMaxMoveSpeed: 200
