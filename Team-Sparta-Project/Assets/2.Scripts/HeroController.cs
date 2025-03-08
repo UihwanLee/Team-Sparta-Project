@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class HeroController : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class HeroController : MonoBehaviour
     [Header("Hero Info")]
     [SerializeField] private int hp;                                // 히어로 체력.
     [SerializeField] private int damage;                            // 히어로 공격력
+
+    public Slider hpSlider;
 
     // Start is called before the first frame update
     void Start()
