@@ -8,6 +8,10 @@ TagManager:
   - Path_1
   - Path_2
   - Path_3
+  - Box
+  - Truck
+  - Monster
+  - Bullet
   layers:
   - Default
   - TransparentFX

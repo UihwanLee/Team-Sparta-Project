@@ -38,7 +38,7 @@ public class MonsterPoolManager : MonoBehaviour
     }
 
     // 소환할 몬스터 종류
-    [SerializeField] private List<Monster> monsters;
+    [SerializeField] private List<Monster> monsterDataList;
     [SerializeField] private GameObject monsterPrefab;
 
     // 몬스터 오브젝트를 관리할 리스트
@@ -46,13 +46,20 @@ public class MonsterPoolManager : MonoBehaviour
 
     private void Start()
     {
+        InitValue();
         InitMonsterPoolList();
+    }
+
+    private void InitValue()
+    {
+        monsterDataList = GameData.Instance.MonsterDataList;
+        monsterPrefab = GameData.Instance.MonsterPrefab;
     }
 
     private void InitMonsterPoolList()
     {
         // 몬스터 타입 별 리스트 초기화
-        foreach(Monster monster in monsters)
+        foreach(Monster monster in monsterDataList)
         {
             GameObject[] monsterList = new GameObject[monster.maxCount];
 
@@ -61,7 +68,7 @@ public class MonsterPoolManager : MonoBehaviour
             {
                 monsterList[i] = Instantiate(monsterPrefab, Vector3.zero, Quaternion.identity);
 
-                monsterList[i].GetComponent<MonsterController>().SetInfo(i, monster.title, monster.level, monster.hp, monster.damage, monster.speed);
+                monsterList[i].GetComponent<MonsterController>().SetInfo(i, monster.title, monster.level, monster.maxHp, monster.damage, monster.speed);
                 monsterList[i].GetComponent<MonsterController>().SetSprites(monster.sprites);
                 monsterList[i].SetActive(false);
             }
@@ -81,6 +88,12 @@ public class MonsterPoolManager : MonoBehaviour
             if (monsterList[i].activeSelf == false)
             {
                 monsterList[i].SetActive(true);
+
+                // 몬스터 리셋
+                MonsterController monster = monsterList[i].GetComponent<MonsterController>();
+                monster.ResetValue();
+                monster.ResetMaxHP(monsterDataList[monster.Level].maxHp);
+
                 return monsterList[i];
             }
         }
@@ -96,7 +109,7 @@ public class MonsterPoolManager : MonoBehaviour
         return monsterList[_id];
     }
 
-    public void ReleaseMonsterFromPool(int _level, int _id)
+    public void ReturnMonsterToPool(int _level, int _id)
     {
         GameObject[] monsterList = monsterPoolList[_level];
         if (monsterList == null) { Debug.LogError("That monster list does not exist!"); return; }

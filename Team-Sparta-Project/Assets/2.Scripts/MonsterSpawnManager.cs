@@ -6,15 +6,13 @@ public class MonsterSpawnManager : MonoBehaviour
 {
     // 몬스터 소환 스크립트
 
-    [SerializeField]
-    private Transform spawnPos;
-    [SerializeField]
-    private float spawnTime;
+    [SerializeField] private Transform spawnPos;
+    [SerializeField] private float spawnTime;
 
     private float curTime;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         InitMonster();
         StartCoroutine(SpawnMonsters());
@@ -22,6 +20,7 @@ public class MonsterSpawnManager : MonoBehaviour
 
     private void InitMonster()
     {
+        spawnTime = GameData.Instance.MonsterSpawnTime;
         curTime = spawnTime;
     }
 
@@ -43,7 +42,7 @@ public class MonsterSpawnManager : MonoBehaviour
 
         if (monster == null)
         {
-            //Debug.LogError("There are no objects available!");
+            Debug.LogError("There are no objects available!");
             return;
         }
 

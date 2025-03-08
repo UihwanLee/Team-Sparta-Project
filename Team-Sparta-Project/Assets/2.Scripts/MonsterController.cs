@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,62 +17,110 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private string layer;                          // 몬스터 경로
     [SerializeField] private float speed;                           // 몬스터 스피드
     [SerializeField] private Vector3 moveDir;                       // 몬스터 이동 방향
-    [SerializeField] private int hp;                                // 몬스터 체력.
+    [SerializeField] private int maxHp;                             // 몬스터 최대 체력
+    [SerializeField] private int hp;                                // 몬스터 체력
     [SerializeField] private int damage;                            // 몬스터 공격력
     [SerializeField] private List<SpriteRenderer> spriteRenderers;  // 몬스터 이미지
-
-    [SerializeField] private int pathLevel;                        // 몬스터 경로 레벨
-
-    [Header("Monster BT")]
-    [SerializeField] private Selector root;
-    [SerializeField] private bool isMonsterAround;
+    [SerializeField] private GameObject hpBar;                      // 몬스터 hp바
 
     [Header("Monster Physics")]
-    private Rigidbody2D rb;
-    [SerializeField] public float jumpForce = 5.0f;
-    [SerializeField] private bool isJumping = false;
+    [SerializeField] public float jumpForce;        // 점프 속도
+    [SerializeField] public float slideSpeed;       // 미끄러지는 속도
+    [SerializeField] private Rigidbody2D rb;
 
-    public float climbHeight = 4.0f;      // 올라갈 높이
-    public float slideSpeed = 1f;       // 미끄러지는 속도
-    [SerializeField] private bool isClimbing = false;
-    [SerializeField] private bool isSliding = false;
+    [Header("Monster State")]
+    [SerializeField] private bool isDead;
+    [SerializeField] private bool isDamaged;
+    [SerializeField] private bool isJumping;
+    [SerializeField] private bool isClimbing;
+    [SerializeField] private bool isSliding;
+    [SerializeField] private bool isAttacking;
 
-    private void Start()
+    [Header("UI")]
+    [SerializeField] private GameObject ui_Damage;
+    [SerializeField] private TextMeshProUGUI ui_Damage_Text;
+    private Color textColor;
+
+    [Header("Monster Animation")]
+    [SerializeField] private Animator anim;
+
+    // 화면 밖 범위 설정 (상하, 좌우)
+    private float topBoundary = 10f;
+    private float bottomBoundary = -10f;
+    private float rightBoundary = 30f;
+    private float leftBoundary = -5f;
+
+    private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        isMonsterAround = false;
-        //InitBehaviorTree();
+        ResetValue();
     }
 
     private void Update()
     {
-        // BehaviorTree 동작
         if (isSliding)
-        {
-            Sliding();
-        }
-        else if (isClimbing)
-        {
-            if (isJumping == false) ClimbUp();
-        }
+            Slide();
+        else if (isClimbing && !isJumping)
+            ClimbUp();
         else
+            Move();
+
+        if(CheckOutOfScreen())
         {
-            Moving();
+            // 화면 밖으로 나가면 비활성화
+            MonsterPoolManager.Instance.ReturnMonsterToPool(this.level, this.id);
         }
     }
 
-    void Moving()
+    public void ResetValue()
     {
-        transform.position += moveDir * speed * Time.deltaTime;
+        ui_Damage.SetActive(false);
+        textColor = Color.white;
+
+        rb = GetComponent<Rigidbody2D>();
+        isJumping = false;
+        isClimbing = false;
+        isSliding = false;
+        isAttacking = false;
+
+        anim = GetComponent<Animator>();
+        jumpForce = GameData.Instance.MonsterJumpForce;
+    }
+
+    public void ResetMaxHP(int _maxHP)
+    {
+        maxHp = _maxHP;
+        hp = maxHp;
+
+        Slider hpSlider = hpBar.GetComponentInChildren<Slider>();
+        hpSlider.value = 1.0f;
+    }
+
+    bool CheckOutOfScreen()
+    {
+        // 화면 밖으로 나갔는지 체크
+        Vector3 position = transform.position;
+
+        if (position.y > topBoundary || position.y < bottomBoundary || position.x > rightBoundary || position.x < leftBoundary)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    // 기본 동작
+    void Move()
+    {
+        transform.position += (Vector3)(moveDir * speed * Time.deltaTime);
     }
 
     // 미끄러지는 동작
-    void Sliding()
+    void Slide()
     {
         rb.velocity = new Vector2(3.0f, rb.velocity.y);
     }
 
-    // 올라가는 동작
+    // 점프 동작
     void ClimbUp()
     {
         StartCoroutine(ClimbUpCoroutine());
@@ -79,78 +128,226 @@ public class MonsterController : MonoBehaviour
 
     private IEnumerator ClimbUpCoroutine()
     {
+        // 점프 코루틴
         isJumping = true;
-
-        transform.position += moveDir * speed * Time.deltaTime;
-
-        yield return new WaitForSeconds(0.5f); // 점프 유지 시간
-
+        transform.position += (Vector3)(moveDir * speed * Time.deltaTime);
+        yield return new WaitForSeconds(0.5f);
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-
-        yield return new WaitForSeconds(0.5f); // 점프 유지 시간
-
+        yield return new WaitForSeconds(0.5f);
         isClimbing = false;
+        yield return new WaitForSeconds(3.0f);
+        isJumping = false;
+    }
 
-        yield return new WaitForSeconds(3.0f); // 쿨타임
-
-        isJumping = false; // 점프가 끝나면 다시 점프 가능
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == TagData.TAG_BULLET)
+        {
+            // 총알 맞을 시 데미지를 입는다.
+            Damage();
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
+        if(collision.gameObject.tag == TagData.TAG_BOX || 
+            collision.gameObject.tag == TagData.HERO)
+        {
+            TryAttack(collision.gameObject);
+        }
+
         if (collision.gameObject.layer == LayerMask.NameToLayer(layer))
         {
-            int hitCondition = GetHitPosition(collision);
+            HandleCollision(collision);
+        }
+    }
 
-            switch (hitCondition)
+    private void TryAttack(GameObject _obj)
+    { 
+        // 공격이 가능할 시 공격
+        if(!isAttacking)
+        {
+            Attack(_obj);
+        }
+    }
+
+    private void Attack(GameObject _obj)
+    {
+        StartCoroutine(AttackCoroutine(_obj));
+    }
+
+    private IEnumerator AttackCoroutine(GameObject _obj)
+    { 
+        isAttacking = true;
+
+        // 데미지 적용 주체 판별
+        if(_obj.tag == TagData.TAG_BOX)
+        {
+            Box box = _obj.GetComponent<Box>();
+            box.Damage(damage); box.IsDamage = true;
+        }
+        else if (_obj.tag == TagData.HERO)
+        {
+            HeroController heroController = _obj.GetComponent<HeroController>();
+            heroController.Damage(damage); heroController.IsDamage = true;
+        }
+        else
+        {
+            Debug.LogError("This are no conflct");
+        }
+
+        // 공격 애니메이션 실행
+        anim.SetBool("IsAttacking", isAttacking);
+
+        yield return new WaitForSeconds(0.5f);
+
+        isAttacking = false;
+        anim.SetBool("IsAttacking", isAttacking);
+    }
+
+    private void Damage()
+    {
+        // 받는 몬스터마다 데미지를 달리한다.
+        int damage = Random.Range(GameData.Instance.HeroMinDamage, GameData.Instance.HeroMaxDamage);
+
+        // hp가 0 이하 시 파괴
+        if (hp - damage <= 0)
+        {
+            hp = 0;
+            Dead();
+            return;
+        }
+
+        // 공격 받는 모션
+        hpBar.SetActive(true);
+
+        // 데미지 적용
+        hp -= damage;
+        StartCoroutine(DamageEffect());
+        StartCoroutine(DamageShow(damage));
+
+        // Hp 슬라이더 업데이트
+        UpdateHpSlider();
+    }
+
+    private IEnumerator DamageEffect()
+    {
+        // 색상 변경
+        if (spriteRenderers.Count != 0)
+        {
+            foreach(SpriteRenderer spriteRenderer in spriteRenderers)
             {
-                case 0:
-                    isSliding = true;
-                    isClimbing = false;
-                    break;
-                case 1:
-                    if (isJumping == false && isSliding == false)
-                    {
-                        isClimbing = true;
-                    }
-                    isSliding = false;
-                    break;
-                case -1:
-                    break;
-                default:
-                    isSliding = false;
-                    isClimbing = false;
-                    break;
+                Color damageColor;
+                if (ColorUtility.TryParseHtmlString("#E0E0E0", out damageColor))
+                {
+                    spriteRenderer.color = damageColor;
+                    yield return new WaitForSeconds(0.1f);
+                    spriteRenderer.color = Color.white;
+                }
             }
+        }
+    }
+
+    IEnumerator DamageShow(int _dmg)
+    {
+        ui_Damage.SetActive(true);
+        ui_Damage_Text.text = _dmg.ToString();
+        yield return StartCoroutine(FadeText(ui_Damage_Text, 0, 1, 0.5f)); 
+        yield return StartCoroutine(FadeText(ui_Damage_Text, 1, 0, 0.5f));
+        ui_Damage.SetActive(false);
+    }
+
+    private IEnumerator FadeText(TextMeshProUGUI text, float startAlpha, float endAlpha, float duration)
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Lerp(startAlpha, endAlpha, elapsedTime / duration);
+            textColor.a = alpha;
+            text.color = textColor;
+            yield return null;
+        }
+        textColor.a = endAlpha;
+        text.color = textColor;
+    }
+
+
+
+    private void UpdateHpSlider()
+    {
+        if (hpBar != null)
+        {
+            Slider hpSlider = hpBar.GetComponentInChildren<Slider>();
+            hpSlider.value = (float)hp / maxHp; // HP 값을 0~1 범위로 변환
+        }
+    }
+
+    private void Dead()
+    {
+        isDead = true;
+
+        StartCoroutine(DeadCoroutine());    
+    }
+
+    private IEnumerator DeadCoroutine()
+    {
+        // 죽는 애니메이션 실행
+        anim.SetBool("IsIdle", false);
+        anim.SetBool("IsDead", isDead);
+        
+        yield return new WaitForSeconds(2.0f);
+
+        // PoolManager에게 죽었다고 알림
+        MonsterPoolManager.Instance.ReturnMonsterToPool(this.level, this.id);
+    }
+
+    private void HandleCollision(Collision2D collision)
+    {
+        // 충돌 객체의 위치에 따라 동작 수행
+        switch (GetHitPosition(collision))
+        {
+            case 0:
+                isSliding = true;
+                isClimbing = false;
+                break;
+            case 1:
+                if (!isJumping && !isSliding)
+                    isClimbing = true;
+                isSliding = false;
+                break;
+            default:
+                isSliding = false;
+                isClimbing = false;
+                break;
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer(layer))
+        if (collision.gameObject.layer == LayerMask.NameToLayer(layer) && collision.transform.position.y > transform.position.y)
         {
-            if(collision.transform.position.y > transform.position.y)
-            {
-                isSliding = false;
-            }
+            isSliding = false;
         }
     }
 
     private int GetHitPosition(Collision2D collision)
     {
-        float otherMonsterX = collision.transform.position.x;
-        float otherMonsterY = collision.transform.position.y;
-        float myX = transform.position.x;
-        float myY = transform.position.y;
+        Vector2 otherPos = collision.transform.position;
+        Vector2 myPos = transform.position;
 
-        if (otherMonsterY - myY > 1.0f) return 0;
-        else if(myX - otherMonsterX > 0.5f) return 1;
-        else return -1;
+        if (otherPos.y - myPos.y > 1.0f) return 0;
+        if (myPos.x - otherPos.x > 0.5f) return 1;
+        return -1;
     }
 
     public void SetPath(string myLayer, Collider2D _collider, Collider2D[] ignorePath1, Collider2D[] ignorePath2)
     {
-        if (myLayer == "") Debug.LogError("There is no path!");
+        if (myLayer == "")
+        {
+            Debug.LogError("There is no path!");
+            return;
+        }
 
         // 주어진 경로 지정
         layer = myLayer;
@@ -182,8 +379,6 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-    public void SetID(int _id) { id = _id; }
-    public int GetID() { return id; }
     public void SetSprites(List<Sprite> _sprites)
     {
         if (this.spriteRenderers.Count == 0) { Debug.LogError("SetSprites: This list does not exist!"); }
@@ -193,7 +388,7 @@ public class MonsterController : MonoBehaviour
             this.spriteRenderers[i].sprite = _sprites[i];
         }
     }
-    public void SetInfo(int _id, string _title, int _level, int _hp, int _damage, float _speed) { id = _id; title = _title; level = _level; hp = _hp; damage = _damage; speed = _speed; }
+    public void SetInfo(int _id, string _title, int _level, int _maxHp, int _damage, float _speed) { id = _id; title = _title; level = _level; maxHp = _maxHp; hp = _maxHp; damage = _damage; speed = _speed; }
 
     public void AddOrderLayer(int amount)
     {
@@ -203,75 +398,5 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-    //private void InitBehaviorTree()
-    //{
-    //    root = new Selector();
-    //    Sequence actionSequence = new Sequence();
-    //    Sequence jumpSequence = new Sequence();
-    //    Sequence attackSequence = new Sequence();
-    //    Sequence chaseSequence = new Sequence();
-
-    //    Condition isPlayerAround = new Condition(IsPlayerAround);
-    //    Condition isMonsterAround = new Condition(IsMonsterAround);
-
-    //    Action jumpAction = new Action(TryJumping);
-    //    Action attackAction = new Action(Attack);
-    //    Action chaseAction = new Action(Chase);
-
-    //    root.AddChild(actionSequence);
-    //    root.AddChild(chaseSequence);
-
-    //    actionSequence.AddChild(jumpSequence);
-    //    actionSequence.AddChild(attackSequence);
-    //    chaseSequence.AddChild(chaseAction);
-
-    //    jumpSequence.AddChild(isMonsterAround);
-    //    jumpSequence.AddChild(jumpAction);
-    //    attackSequence.AddChild(isPlayerAround);
-    //    attackSequence.AddChild(attackAction);
-
-    //    root.Run();
-    //}
-
-    //private NodeState TryJumping()
-    //{
-    //    if (isJumping == false)
-    //    {
-    //        return Jumping();
-    //    }
-    //    return NodeState.FAIL;
-    //}
-
-    //private NodeState Jumping()
-    //{
-    //    //Debug.Log("Jummping!");
-
-    //    // 점프 실행
-    //    StartCoroutine(SmoothJump());
-    //    return NodeState.SUCCESS;
-    //}
-
-    //private NodeState Attack()
-    //{
-    //    Debug.Log("Attack Player!");
-    //    return NodeState.SUCCESS;
-    //}
-
-    //private NodeState Chase()
-    //{
-    //    //Debug.Log("Chase Player!");
-    //    Vector2 moveDirection = Vector2.left;  // 왼쪽으로 이동
-    //    rb.velocity = new Vector2(moveDirection.x * speed, rb.velocity.y);
-    //    return NodeState.SUCCESS;
-    //}
-
-    //private bool IsPlayerAround()
-    //{
-    //    return false;
-    //}
-
-    //private bool IsMonsterAround()
-    //{
-    //    return isJumping ? true : isMonsterAround;
-    //}
+    public int Level { get { return level; } }
 }
