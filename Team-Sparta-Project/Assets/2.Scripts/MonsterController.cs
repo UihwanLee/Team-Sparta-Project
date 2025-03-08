@@ -260,6 +260,7 @@ public class MonsterController : MonoBehaviour
     private IEnumerator DeadCoroutine()
     {
         // 죽는 애니메이션 실행
+        anim.SetBool("IsIdle", false);
         anim.SetBool("IsDead", isDead);
         
         yield return new WaitForSeconds(2.0f);
