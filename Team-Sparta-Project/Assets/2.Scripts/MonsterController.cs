@@ -121,9 +121,7 @@ public class MonsterController : MonoBehaviour
     }
 
     private IEnumerator AttackCoroutine(Box _box)
-    {
-        Debug.Log("공격!");
-
+    { 
         isAttacking = true;
 
         // 데미지 적용

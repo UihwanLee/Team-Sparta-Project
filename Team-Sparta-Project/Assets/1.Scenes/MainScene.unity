@@ -1500,7 +1500,7 @@ GameObject:
   - component: {fileID: 1489341061}
   m_Layer: 0
   m_Name: Truck
-  m_TagString: Untagged
+  m_TagString: Truck
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1587,7 +1587,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.8, y: 20.3}
+  m_Size: {x: 2.73, y: 20.3}
   m_EdgeRadius: 0
 --- !u!1 &1499112580
 GameObject:
@@ -1782,6 +1782,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1783366072}
   - component: {fileID: 1783366074}
+  - component: {fileID: 1783366075}
   m_Layer: 0
   m_Name: TruckSprite
   m_TagString: Untagged
@@ -1858,6 +1859,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &1783366075
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1783366071}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.52, y: -1.18}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.8444445, y: 2.8444445}
+    newSize: {x: 5.12, y: 5.12}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2.73, y: 0.69}
+  m_EdgeRadius: 0
 --- !u!1 &1835783224 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6628118391875189848, guid: 5adc49a3cd414458b96cda173bbaeffb, type: 3}
@@ -2796,7 +2842,7 @@ MonoBehaviour:
   moveSpeed: 0
   moveRate: 1
   moveDir: {x: -1, y: 0, z: 0}
-  isDamage: 0
+  isStuck: 0
 --- !u!212 &7961987541149032754
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2867,7 +2913,7 @@ MonoBehaviour:
   moveSpeed: 0
   moveRate: 1
   moveDir: {x: -1, y: 0, z: 0}
-  isDamage: 0
+  isStuck: 0
 --- !u!212 &8761042812129236771
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2953,7 +2999,7 @@ MonoBehaviour:
   moveSpeed: 0
   moveRate: 2
   moveDir: {x: -1, y: 0, z: 0}
-  isDamage: 0
+  isStuck: 0
 --- !u!4 &8969240201283377900
 Transform:
   m_ObjectHideFlags: 0
@@ -3004,7 +3050,7 @@ MonoBehaviour:
   moveSpeed: 0
   moveRate: 2
   moveDir: {x: -1, y: 0, z: 0}
-  isDamage: 0
+  isStuck: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

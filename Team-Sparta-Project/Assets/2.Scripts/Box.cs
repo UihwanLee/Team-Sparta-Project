@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Box : MonoBehaviour
 {
@@ -12,13 +14,15 @@ public class Box : MonoBehaviour
     private GameObject boxSprite;
     private GameObject hpPannel;
 
+    private TruckManager truckManager;
+
     // Start is called before the first frame update
     void Start()
     {
         hp = 100;
     }
 
-    public void SetBoxSetting()
+    public void SetBoxSetting(TruckManager _truckManager)
     {
         if(this.transform.childCount >= 2)
         {
@@ -28,6 +32,8 @@ public class Box : MonoBehaviour
             // Hp Pannel 적용
             hpPannel = this.transform.GetChild(1).gameObject;
         }
+
+        truckManager = _truckManager;
     }
 
     public void Damage(int _dmg)
@@ -48,9 +54,30 @@ public class Box : MonoBehaviour
 
     private void Destroy()
     {
+        if(truckManager == null)
+        {
+            Debug.LogError("There is no truckManager");
+            return;
+        }
+
         isDestroy = true;
+
+        truckManager.OnBoxDestroyed(this);
+
+        Destroy(gameObject);
     }
 
+    public void Drop(Vector3 targetPosition, float dropSpeed)
+    {
+        StartCoroutine(DropCoroutine(targetPosition, dropSpeed));
+    }
+
+    IEnumerator DropCoroutine(Vector3 targetPosition, float dropSpeed)
+    {
+        this.transform.position = Vector3.Lerp(this.transform.position, targetPosition, dropSpeed * Time.deltaTime);
+        yield return new WaitForSeconds(0.1f);
+        this.gameObject.transform.position = targetPosition; // 최종 위치 보정
+    }
 
     public int Hp { get { return hp; } set { hp = value; }}
 

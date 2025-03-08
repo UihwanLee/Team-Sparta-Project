@@ -10,6 +10,7 @@ TagManager:
   - Path_3
   - Box
   - Truck
+  - Monster
   layers:
   - Default
   - TransparentFX
