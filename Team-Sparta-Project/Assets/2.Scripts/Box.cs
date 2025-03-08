@@ -52,4 +52,6 @@ public class Box : MonoBehaviour
     {
         isDestroy = true;
     }
+
+    public int GetHp() { return hp; }
 }

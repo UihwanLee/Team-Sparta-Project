@@ -23,15 +23,18 @@ public class MonsterController : MonoBehaviour
     [Header("Monster Physics")]
     [SerializeField] public float jumpForce;        // 점프 속도
     [SerializeField] public float slideSpeed;       // 미끄러지는 속도
-    [SerializeField] private bool isJumping = false;
-    [SerializeField] private bool isClimbing = false;
-    [SerializeField] private bool isSliding = false;
+    [SerializeField] private bool isJumping;
+    [SerializeField] private bool isClimbing;
+    [SerializeField] private bool isSliding;
+    [SerializeField] private bool isAttacking;
+    [SerializeField] private Rigidbody2D rb;
 
-    private Rigidbody2D rb;
+    [Header("Monster Animation")]
+    [SerializeField] private Animator anim;
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        InitValue();
     }
 
     private void Update()
@@ -42,6 +45,17 @@ public class MonsterController : MonoBehaviour
             ClimbUp();
         else
             Move();
+    }
+
+    private void InitValue()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        isJumping = false;
+        isClimbing = false;
+        isSliding = false;
+        isAttacking = false;
+
+        anim = GetComponent<Animator>();
     }
 
     // 기본 동작
@@ -77,10 +91,49 @@ public class MonsterController : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
+        if(collision.gameObject.tag == BoxTag.boxTag)
+        {
+            TryAttack(collision.gameObject);
+        }
+
         if (collision.gameObject.layer == LayerMask.NameToLayer(layer))
         {
             HandleCollision(collision);
         }
+    }
+
+    private void TryAttack(GameObject _boxObj)
+    { 
+        Box box = _boxObj.GetComponent<Box>();
+
+        // 공격이 가능할 시 공격
+        if(!isAttacking)
+        {
+            Attack(box);
+        }
+    }
+
+    private void Attack(Box _box)
+    {
+        StartCoroutine(AttackCoroutine(_box));
+    }
+
+    private IEnumerator AttackCoroutine(Box _box)
+    {
+        Debug.Log("공격!");
+
+        isAttacking = true;
+
+        // 데미지 적용
+        _box.Damage(this.damage);
+
+        // 공격 애니메이션 실행
+        anim.SetBool("IsAttacking", isAttacking);
+
+        yield return new WaitForSeconds(0.5f);
+
+        isAttacking = false;
+        anim.SetBool("IsAttacking", isAttacking);
     }
 
     private void HandleCollision(Collision2D collision)
