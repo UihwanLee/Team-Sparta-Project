@@ -33,8 +33,6 @@ public class HeroController : MonoBehaviour
     {
         maxHp = GameData.Instance.HeroMaxHP;
         hp = maxHp;
-
-        damage = GameData.Instance.HeroDamage;
     }
 
     public void Damage(int _dmg)

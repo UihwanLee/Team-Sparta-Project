@@ -30,7 +30,6 @@ public class GunController : MonoBehaviour
         fireRate = GameData.Instance.GunFireRate;
         maxBullets = GameData.Instance.GunMaxBullets;
         bulletSpeed = GameData.Instance.BulletSpeed;
-        bulletDamage = GameData.Instance.HeroDamage;
     }
 
     private void InitBullet()
@@ -41,10 +40,13 @@ public class GunController : MonoBehaviour
         // 최대 개수만큼 총알 생성
         for (int i = 0; i < maxBullets; i++)
         {
+            // 총알마다 랜덤한 데미지 값을 갖는다.
+            bulletDamage = Random.Range(GameData.Instance.HeroMinDamage, GameData.Instance.HeroMaxDamage);
+
             GameObject bullet = Instantiate(bulletPrefab, gunMuzzle.position, Quaternion.identity);
             bullet.SetActive(false);  
             Bullet bulletScript = bullet.GetComponent<Bullet>();
-            bulletScript.InitBullet(this, bulletSpeed, bulletDamage); 
+            bulletScript.InitBullet(this, bulletSpeed); 
             bulletList.Add(bullet);
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,6 +36,11 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private bool isSliding;
     [SerializeField] private bool isAttacking;
 
+    [Header("UI")]
+    [SerializeField] private GameObject ui_Damage;
+    [SerializeField] private TextMeshProUGUI ui_Damage_Text;
+    private Color textColor;
+
     [Header("Monster Animation")]
     [SerializeField] private Animator anim;
 
@@ -62,6 +68,9 @@ public class MonsterController : MonoBehaviour
         isAttacking = false;
 
         anim = GetComponent<Animator>();
+
+        ui_Damage.SetActive(false);
+        textColor = Color.white;
 
         jumpForce = GameData.Instance.MonsterJumpForce;
     }
@@ -102,8 +111,7 @@ public class MonsterController : MonoBehaviour
         if(collision.gameObject.tag == TagData.TAG_BULLET)
         {
             // 총알 맞을 시 데미지를 입는다.
-            int bulletDamage = collision.gameObject.GetComponent<Bullet>().BulletDamage;
-            Damage(bulletDamage);
+            Damage();
         }
     }
 
@@ -164,10 +172,13 @@ public class MonsterController : MonoBehaviour
         anim.SetBool("IsAttacking", isAttacking);
     }
 
-    private void Damage(int _dmg)
+    private void Damage()
     {
+        // 받는 몬스터마다 데미지를 달리한다.
+        int damage = Random.Range(GameData.Instance.HeroMinDamage, GameData.Instance.HeroMaxDamage);
+
         // hp가 0 이하 시 파괴
-        if (hp - _dmg <= 0)
+        if (hp - damage <= 0)
         {
             hp = 0;
             Dead();
@@ -178,8 +189,9 @@ public class MonsterController : MonoBehaviour
         hpBar.SetActive(true);
 
         // 데미지 적용
-        hp -= _dmg;
+        hp -= damage;
         StartCoroutine(DamageEffect());
+        StartCoroutine(DamageShow(damage));
 
         // Hp 슬라이더 업데이트
         UpdateHpSlider();
@@ -187,6 +199,7 @@ public class MonsterController : MonoBehaviour
 
     private IEnumerator DamageEffect()
     {
+        // 색상 변경
         if (spriteRenderers.Count != 0)
         {
             foreach(SpriteRenderer spriteRenderer in spriteRenderers)
@@ -201,6 +214,32 @@ public class MonsterController : MonoBehaviour
             }
         }
     }
+
+    IEnumerator DamageShow(int _dmg)
+    {
+        ui_Damage.SetActive(true);
+        ui_Damage_Text.text = _dmg.ToString();
+        yield return StartCoroutine(FadeText(ui_Damage_Text, 0, 1, 0.5f)); 
+        yield return StartCoroutine(FadeText(ui_Damage_Text, 1, 0, 0.5f));
+        ui_Damage.SetActive(false);
+    }
+
+    private IEnumerator FadeText(TextMeshProUGUI text, float startAlpha, float endAlpha, float duration)
+    {
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Lerp(startAlpha, endAlpha, elapsedTime / duration);
+            textColor.a = alpha;
+            text.color = textColor;
+            yield return null;
+        }
+        textColor.a = endAlpha;
+        text.color = textColor;
+    }
+
+
 
     private void UpdateHpSlider()
     {

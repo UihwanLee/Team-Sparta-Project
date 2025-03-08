@@ -58,7 +58,8 @@ public class GameData : MonoBehaviour
 
     [Header("Hero")]
     [SerializeField] private int heroMaxHP = 100;                           // 히어로 최대체력
-    [SerializeField] private int heroDamage = 20;                           // 히어로 데미지
+    [SerializeField] private int heroMinDamage = 5;                         // 히어로 최소데미지
+    [SerializeField] private int heroMaxDamage = 15;                        // 히어로 최대데미지
 
     [Header("Gun")]
     [SerializeField] private GameObject bulletPrefab;                       // 총알 프리팹
@@ -84,7 +85,8 @@ public class GameData : MonoBehaviour
 
     // hero
     public int HeroMaxHP { get { return heroMaxHP; } }
-    public int HeroDamage { get { return heroDamage; } }
+    public int HeroMinDamage { get { return heroMinDamage; } }
+    public int HeroMaxDamage { get { return heroMaxDamage; } }
 
     // Gun
     public GameObject BulletPrefab { get { return bulletPrefab; } }
