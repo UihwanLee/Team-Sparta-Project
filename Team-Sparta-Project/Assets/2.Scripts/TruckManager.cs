@@ -30,11 +30,6 @@ public class TruckManager : MonoBehaviour
         InitBoxList();
     }
 
-    private void Update()
-    {
-        
-    }
-
     void InitValue()
     {
         boxMaxHP = GameData.Instance.BoxMaxHP;

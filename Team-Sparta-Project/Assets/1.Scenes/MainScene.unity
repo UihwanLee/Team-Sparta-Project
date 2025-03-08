@@ -1221,7 +1221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22647ce8c90d13c488d11e2e131c27a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxMaxHP: 2000
+  boxMaxHP: 100
   boxDropSpeed: 2000
   monsterSpawnTime: 3
   monsterJumpForce: 5
@@ -1665,9 +1665,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1395425957216575384, guid: 39e73014526a04149a4b4bff2302893b, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1395425957216575384, guid: 39e73014526a04149a4b4bff2302893b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2012301019613393695, guid: 39e73014526a04149a4b4bff2302893b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7020286237125940336, guid: 39e73014526a04149a4b4bff2302893b, type: 3}
       propertyPath: m_Constraints
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7679397629023914269, guid: 39e73014526a04149a4b4bff2302893b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8958240697474582917, guid: 39e73014526a04149a4b4bff2302893b, type: 3}
       propertyPath: m_Name
