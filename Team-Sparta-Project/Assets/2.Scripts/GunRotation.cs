@@ -6,6 +6,8 @@ public class GunRotation : MonoBehaviour
 {
     // 마우스 이벤트에 따른 Gun 회전 스크립트
 
+    [SerializeField] private GameObject gunVision;
+
     private bool isDragging = false;
 
     void Update()
@@ -13,10 +15,12 @@ public class GunRotation : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             isDragging = true;
+            gunVision.SetActive(true);
         }
         if (Input.GetMouseButtonUp(0))
         {
             isDragging = false;
+            gunVision.SetActive(false);
         }
         if (isDragging)
         {
