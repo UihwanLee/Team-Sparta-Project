@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class TruckManager : MonoBehaviour
 {
@@ -18,19 +17,28 @@ public class TruckManager : MonoBehaviour
     [Header("BoxObject")]
     [SerializeField] private Transform boxTrans;
     [SerializeField] private List<Box> boxList = new List<Box>();
-    [SerializeField] private float dropSpeed = 1000.0f;
+
+    private int boxMaxHP;
+    private float boxDropSpeed;
 
     public static bool isStuck;
 
     // Start is called before the first frame update
     private void Start()
     {
+        InitValue();
         InitBoxList();
     }
 
     private void Update()
     {
         
+    }
+
+    void InitValue()
+    {
+        boxMaxHP = GameData.Instance.BoxMaxHP;
+        boxDropSpeed = GameData.Instance.BoxDropSpeed;
     }
 
     void InitBoxList()
@@ -48,7 +56,7 @@ public class TruckManager : MonoBehaviour
                     Box box = boxObj.gameObject.AddComponent<Box>();
                    
                     // box 세팅
-                    box.SetBoxSetting(this);
+                    box.SetBoxSetting(this, boxMaxHP);
                     
                     // boxList에 추가
                     boxList.Add(box);
@@ -63,14 +71,12 @@ public class TruckManager : MonoBehaviour
         // 리스트에서 제거
         boxList.Remove(destroyedBox);
 
-        Debug.Log(destroyedBox.gameObject.transform.position);
-
         // 파괴된 박스보다 위에 있는 박스들을 내려오게 함
         Vector3 targetPosition = destroyedBox.gameObject.transform.position;
         foreach (Box box in boxList)
         {
             Vector3 newTargetPosition = box.transform.position; // 현재 박스 위치 저장
-            box.Drop(targetPosition, dropSpeed);
+            box.Drop(targetPosition, boxDropSpeed);
             targetPosition = newTargetPosition;                 // 다음 박스 targetPosition 갱신
         }
     }

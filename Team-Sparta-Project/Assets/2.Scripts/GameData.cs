@@ -54,8 +54,14 @@ public class GameData : MonoBehaviour
         }
     }
 
+    [Header("TruckManager")]
+    [SerializeField] private int boxMaxHP = 2000;
+    [SerializeField] private float boxDropSpeed = 1000.0f;
+    public int BoxMaxHP { get { return boxMaxHP; } }
+    public float BoxDropSpeed { get { return boxDropSpeed; } }
+
     [Header("MonsterSpawnManager")]
-    [SerializeField] public float monsterSpawnTime = 3.0f;
+    [SerializeField] private float monsterSpawnTime = 3.0f;
     public float MonsterSpawnTime { get { return monsterSpawnTime; } }
 
     [Header("Monster")]

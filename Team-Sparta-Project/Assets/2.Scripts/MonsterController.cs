@@ -125,7 +125,7 @@ public class MonsterController : MonoBehaviour
         isAttacking = true;
 
         // 데미지 적용
-        _box.Damage(this.damage);
+        _box.Damage(damage);
         _box.IsDamage = true;
 
         // 공격 애니메이션 실행

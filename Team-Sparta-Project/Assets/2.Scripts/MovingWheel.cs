@@ -11,7 +11,7 @@ public class MovingWheel : MonoBehaviour
     [SerializeField] private float moveSpeed;
     private bool isStuck;
 
-    private void Awake()
+    private void Start()
     {
         maxMoveSpeed = GameData.Instance.WheelMaxMoveSpeed;
         moveRate = GameData.Instance.WheelMoveRate;
