@@ -1150,6 +1150,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 428821504350599970, guid: 5adc49a3cd414458b96cda173bbaeffb, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 428821504350599970, guid: 5adc49a3cd414458b96cda173bbaeffb, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 428821504350599970, guid: 5adc49a3cd414458b96cda173bbaeffb, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 428821504350599970, guid: 5adc49a3cd414458b96cda173bbaeffb, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5470163909460436904, guid: 5adc49a3cd414458b96cda173bbaeffb, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1205,6 +1221,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22647ce8c90d13c488d11e2e131c27a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boxMaxHP: 2000
+  boxDropSpeed: 2000
   monsterSpawnTime: 3
   monsterJumpForce: 5
   wheelMaxMoveSpeed: 200
@@ -1473,7 +1491,6 @@ MonoBehaviour:
   - {fileID: 478636169}
   boxTrans: {fileID: 988428232}
   boxList: []
-  dropSpeed: 1
 --- !u!61 &1489341061
 BoxCollider2D:
   m_ObjectHideFlags: 0

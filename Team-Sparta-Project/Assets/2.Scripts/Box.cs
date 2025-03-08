@@ -12,6 +12,7 @@ public class Box : MonoBehaviour
     [SerializeField] private bool isDamage;
     [SerializeField] private bool isDestroy;
     [SerializeField] private GameObject hpBar;
+    [SerializeField] private SpriteRenderer boxSpriteRender;
 
     private GameObject boxSprite;
     private GameObject hpPannel;
@@ -31,6 +32,9 @@ public class Box : MonoBehaviour
 
             // Hp Slider 적용
             hpBar = hpPannel.transform.GetChild(0).GetChild(0).gameObject;
+
+            // SpriteRender 적용
+            boxSpriteRender = this.transform.GetChild(0).GetChild(0).gameObject.GetComponent<SpriteRenderer>();
         }
 
         maxHp = maxHP;
@@ -54,9 +58,25 @@ public class Box : MonoBehaviour
 
         // 데미지 적용
         hp -= _dmg;
+        StartCoroutine(DamageEffect());
 
         // Hp 슬라이더 업데이트
         UpdateHpSlider();
+    }
+
+    private IEnumerator DamageEffect()
+    {
+        if(boxSpriteRender != null)
+        {
+            Color damageColor;
+            if (ColorUtility.TryParseHtmlString("#E0E0E0", out damageColor))
+            {
+                boxSpriteRender.color = damageColor; 
+                yield return new WaitForSeconds(0.1f);
+                boxSpriteRender.color = Color.white; 
+            }
+        }
+
     }
 
     private void UpdateHpSlider()
