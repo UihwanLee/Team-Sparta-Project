@@ -27,7 +27,7 @@ public class TruckManager : MonoBehaviour
 
     private void Update()
     {
-
+        CheckDamage();
     }
 
     void InitBoxList()
@@ -51,5 +51,25 @@ public class TruckManager : MonoBehaviour
             }
         }
 
+    }
+
+    private void CheckDamage()
+    {
+        bool isDamage = false;
+
+        // 데미지 검사
+        foreach (Box box in boxList)
+        {
+            if (box.IsDamage)
+            {
+                isDamage = true;
+            }
+        }
+
+        // BoxList에서 Box가 공격받고 있다면 트럭을 서서히 멈춘다
+        foreach (MovingWheel wheel in wheels)
+        {
+            wheel.IsDamage = isDamage;
+        }
     }
 }
