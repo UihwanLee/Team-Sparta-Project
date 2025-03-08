@@ -8,6 +8,7 @@ TagManager:
   - Path_1
   - Path_2
   - Path_3
+  - Box
   layers:
   - Default
   - TransparentFX
