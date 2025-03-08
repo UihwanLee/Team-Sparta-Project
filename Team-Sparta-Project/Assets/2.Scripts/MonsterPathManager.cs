@@ -44,12 +44,14 @@ public class MonsterPathManager : MonoBehaviour
     private void InitPathColliders()
     {
         GameObject[] path1Objects = GameObject.FindGameObjectsWithTag(TagData.TAG_PATH_1);
-        GameObject[] path2Objects = GameObject.FindGameObjectsWithTag(TagData.TAG_PATH_1);
-        GameObject[] path3Objects = GameObject.FindGameObjectsWithTag(TagData.TAG_PATH_1);
+        GameObject[] path2Objects = GameObject.FindGameObjectsWithTag(TagData.TAG_PATH_2);
+        GameObject[] path3Objects = GameObject.FindGameObjectsWithTag(TagData.TAG_PATH_3);
 
         pathColliders.Add(GetColliders(path1Objects));
         pathColliders.Add(GetColliders(path2Objects));
         pathColliders.Add(GetColliders(path3Objects));
+
+        Debug.Log(pathColliders[0][0].name + pathColliders[0][1].name + pathColliders[1][0].name + pathColliders[1][1].name);
     }
 
     private Collider2D[] GetColliders(GameObject[] pathObjects)
@@ -81,22 +83,22 @@ public class MonsterPathManager : MonoBehaviour
             case 0:  // Path1 선택
                 collider1 = pathColliders[1];
                 collider2 = pathColliders[2];
-                pathLayer = LayerData.LAYER_PATH_1;
-                monster.layer = LayerMask.NameToLayer(LayerData.LAYER_PATH_1);
+                pathLayer = "Monster Path1";
+                monster.layer = LayerMask.NameToLayer("Monster Path1");
                 break;
 
             case 1:  // Path2 선택
                 collider1 = pathColliders[0];
                 collider2 = pathColliders[2];
-                pathLayer = LayerData.LAYER_PATH_2;
-                monster.layer = LayerMask.NameToLayer(LayerData.LAYER_PATH_2);
+                pathLayer = "Monster Path2";
+                monster.layer = LayerMask.NameToLayer("Monster Path2");
                 break;
 
             case 2:  // Path3 선택
                 collider1 = pathColliders[0];
                 collider2 = pathColliders[1];
-                pathLayer = LayerData.LAYER_PATH_3;
-                monster.layer = LayerMask.NameToLayer(LayerData.LAYER_PATH_3);
+                pathLayer = "Monster Path3";
+                monster.layer = LayerMask.NameToLayer("Monster Path3");
                 break;
         }
 
