@@ -20,58 +20,43 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private int damage;                            // 몬스터 공격력
     [SerializeField] private List<SpriteRenderer> spriteRenderers;  // 몬스터 이미지
 
-    [SerializeField] private int pathLevel;                        // 몬스터 경로 레벨
-
-    [Header("Monster BT")]
-    [SerializeField] private Selector root;
-    [SerializeField] private bool isMonsterAround;
-
     [Header("Monster Physics")]
-    private Rigidbody2D rb;
-    [SerializeField] public float jumpForce = 5.0f;
+    [SerializeField] public float jumpForce;        // 점프 속도
+    [SerializeField] public float slideSpeed;       // 미끄러지는 속도
     [SerializeField] private bool isJumping = false;
-
-    public float climbHeight = 4.0f;      // 올라갈 높이
-    public float slideSpeed = 1f;       // 미끄러지는 속도
     [SerializeField] private bool isClimbing = false;
     [SerializeField] private bool isSliding = false;
+
+    private Rigidbody2D rb;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        isMonsterAround = false;
-        //InitBehaviorTree();
     }
 
     private void Update()
     {
-        // BehaviorTree 동작
         if (isSliding)
-        {
-            Sliding();
-        }
-        else if (isClimbing)
-        {
-            if (isJumping == false) ClimbUp();
-        }
+            Slide();
+        else if (isClimbing && !isJumping)
+            ClimbUp();
         else
-        {
-            Moving();
-        }
+            Move();
     }
 
-    void Moving()
+    // 기본 동작
+    void Move()
     {
-        transform.position += moveDir * speed * Time.deltaTime;
+        transform.position += (Vector3)(moveDir * speed * Time.deltaTime);
     }
 
     // 미끄러지는 동작
-    void Sliding()
+    void Slide()
     {
         rb.velocity = new Vector2(3.0f, rb.velocity.y);
     }
 
-    // 올라가는 동작
+    // 점프 동작
     void ClimbUp()
     {
         StartCoroutine(ClimbUpCoroutine());
@@ -79,78 +64,71 @@ public class MonsterController : MonoBehaviour
 
     private IEnumerator ClimbUpCoroutine()
     {
+        // 점프 코루틴
         isJumping = true;
-
-        transform.position += moveDir * speed * Time.deltaTime;
-
-        yield return new WaitForSeconds(0.5f); // 점프 유지 시간
-
+        transform.position += (Vector3)(moveDir * speed * Time.deltaTime);
+        yield return new WaitForSeconds(0.5f);
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-
-        yield return new WaitForSeconds(0.5f); // 점프 유지 시간
-
+        yield return new WaitForSeconds(0.5f);
         isClimbing = false;
-
-        yield return new WaitForSeconds(3.0f); // 쿨타임
-
-        isJumping = false; // 점프가 끝나면 다시 점프 가능
+        yield return new WaitForSeconds(3.0f);
+        isJumping = false;
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer(layer))
         {
-            int hitCondition = GetHitPosition(collision);
+            HandleCollision(collision);
+        }
+    }
 
-            switch (hitCondition)
-            {
-                case 0:
-                    isSliding = true;
-                    isClimbing = false;
-                    break;
-                case 1:
-                    if (isJumping == false && isSliding == false)
-                    {
-                        isClimbing = true;
-                    }
-                    isSliding = false;
-                    break;
-                case -1:
-                    break;
-                default:
-                    isSliding = false;
-                    isClimbing = false;
-                    break;
-            }
+    private void HandleCollision(Collision2D collision)
+    {
+        // 충돌 객체의 위치에 따라 동작 수행
+        switch (GetHitPosition(collision))
+        {
+            case 0:
+                isSliding = true;
+                isClimbing = false;
+                break;
+            case 1:
+                if (!isJumping && !isSliding)
+                    isClimbing = true;
+                isSliding = false;
+                break;
+            default:
+                isSliding = false;
+                isClimbing = false;
+                break;
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer(layer))
+        if (collision.gameObject.layer == LayerMask.NameToLayer(layer) && collision.transform.position.y > transform.position.y)
         {
-            if(collision.transform.position.y > transform.position.y)
-            {
-                isSliding = false;
-            }
+            isSliding = false;
         }
     }
 
     private int GetHitPosition(Collision2D collision)
     {
-        float otherMonsterX = collision.transform.position.x;
-        float otherMonsterY = collision.transform.position.y;
-        float myX = transform.position.x;
-        float myY = transform.position.y;
+        Vector2 otherPos = collision.transform.position;
+        Vector2 myPos = transform.position;
 
-        if (otherMonsterY - myY > 1.0f) return 0;
-        else if(myX - otherMonsterX > 0.5f) return 1;
-        else return -1;
+        if (otherPos.y - myPos.y > 1.0f) return 0;
+        if (myPos.x - otherPos.x > 0.5f) return 1;
+        return -1;
     }
 
     public void SetPath(string myLayer, Collider2D _collider, Collider2D[] ignorePath1, Collider2D[] ignorePath2)
     {
-        if (myLayer == "") Debug.LogError("There is no path!");
+        if (myLayer == "")
+        {
+            Debug.LogError("There is no path!");
+            return;
+        }
 
         // 주어진 경로 지정
         layer = myLayer;
@@ -202,76 +180,4 @@ public class MonsterController : MonoBehaviour
             render.sortingOrder += amount;
         }
     }
-
-    //private void InitBehaviorTree()
-    //{
-    //    root = new Selector();
-    //    Sequence actionSequence = new Sequence();
-    //    Sequence jumpSequence = new Sequence();
-    //    Sequence attackSequence = new Sequence();
-    //    Sequence chaseSequence = new Sequence();
-
-    //    Condition isPlayerAround = new Condition(IsPlayerAround);
-    //    Condition isMonsterAround = new Condition(IsMonsterAround);
-
-    //    Action jumpAction = new Action(TryJumping);
-    //    Action attackAction = new Action(Attack);
-    //    Action chaseAction = new Action(Chase);
-
-    //    root.AddChild(actionSequence);
-    //    root.AddChild(chaseSequence);
-
-    //    actionSequence.AddChild(jumpSequence);
-    //    actionSequence.AddChild(attackSequence);
-    //    chaseSequence.AddChild(chaseAction);
-
-    //    jumpSequence.AddChild(isMonsterAround);
-    //    jumpSequence.AddChild(jumpAction);
-    //    attackSequence.AddChild(isPlayerAround);
-    //    attackSequence.AddChild(attackAction);
-
-    //    root.Run();
-    //}
-
-    //private NodeState TryJumping()
-    //{
-    //    if (isJumping == false)
-    //    {
-    //        return Jumping();
-    //    }
-    //    return NodeState.FAIL;
-    //}
-
-    //private NodeState Jumping()
-    //{
-    //    //Debug.Log("Jummping!");
-
-    //    // 점프 실행
-    //    StartCoroutine(SmoothJump());
-    //    return NodeState.SUCCESS;
-    //}
-
-    //private NodeState Attack()
-    //{
-    //    Debug.Log("Attack Player!");
-    //    return NodeState.SUCCESS;
-    //}
-
-    //private NodeState Chase()
-    //{
-    //    //Debug.Log("Chase Player!");
-    //    Vector2 moveDirection = Vector2.left;  // 왼쪽으로 이동
-    //    rb.velocity = new Vector2(moveDirection.x * speed, rb.velocity.y);
-    //    return NodeState.SUCCESS;
-    //}
-
-    //private bool IsPlayerAround()
-    //{
-    //    return false;
-    //}
-
-    //private bool IsMonsterAround()
-    //{
-    //    return isJumping ? true : isMonsterAround;
-    //}
 }

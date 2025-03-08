@@ -146,12 +146,9 @@ MonoBehaviour:
   - {fileID: 6851911621866096364}
   - {fileID: 7928511827763145290}
   - {fileID: 4391178048448326450}
-  isMonsterAround: 0
   jumpForce: 5
+  slideSpeed: 3
   isJumping: 0
-  myCollider: {fileID: 0}
-  climbHeight: 2.5
-  slideSpeed: 1
   isClimbing: 0
   isSliding: 0
 --- !u!1 &2094693183665648150
