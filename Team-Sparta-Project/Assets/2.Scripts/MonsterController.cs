@@ -44,9 +44,15 @@ public class MonsterController : MonoBehaviour
     [Header("Monster Animation")]
     [SerializeField] private Animator anim;
 
+    // 화면 밖 범위 설정 (상하, 좌우)
+    private float topBoundary = 10f;
+    private float bottomBoundary = -10f;
+    private float rightBoundary = 30f;
+    private float leftBoundary = -5f;
+
     private void Awake()
     {
-        InitValue();
+        ResetValue();
     }
 
     private void Update()
@@ -57,10 +63,19 @@ public class MonsterController : MonoBehaviour
             ClimbUp();
         else
             Move();
+
+        if(CheckOutOfScreen())
+        {
+            // 화면 밖으로 나가면 비활성화
+            MonsterPoolManager.Instance.ReturnMonsterToPool(this.level, this.id);
+        }
     }
 
-    private void InitValue()
+    public void ResetValue()
     {
+        ui_Damage.SetActive(false);
+        textColor = Color.white;
+
         rb = GetComponent<Rigidbody2D>();
         isJumping = false;
         isClimbing = false;
@@ -68,11 +83,29 @@ public class MonsterController : MonoBehaviour
         isAttacking = false;
 
         anim = GetComponent<Animator>();
-
-        ui_Damage.SetActive(false);
-        textColor = Color.white;
-
         jumpForce = GameData.Instance.MonsterJumpForce;
+    }
+
+    public void ResetMaxHP(int _maxHP)
+    {
+        maxHp = _maxHP;
+        hp = maxHp;
+
+        Slider hpSlider = hpBar.GetComponentInChildren<Slider>();
+        hpSlider.value = 1.0f;
+    }
+
+    bool CheckOutOfScreen()
+    {
+        // 화면 밖으로 나갔는지 체크
+        Vector3 position = transform.position;
+
+        if (position.y > topBoundary || position.y < bottomBoundary || position.x > rightBoundary || position.x < leftBoundary)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     // 기본 동작
@@ -364,4 +397,6 @@ public class MonsterController : MonoBehaviour
             render.sortingOrder += amount;
         }
     }
+
+    public int Level { get { return level; } }
 }

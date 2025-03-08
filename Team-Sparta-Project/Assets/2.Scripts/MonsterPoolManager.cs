@@ -88,6 +88,12 @@ public class MonsterPoolManager : MonoBehaviour
             if (monsterList[i].activeSelf == false)
             {
                 monsterList[i].SetActive(true);
+
+                // 몬스터 리셋
+                MonsterController monster = monsterList[i].GetComponent<MonsterController>();
+                monster.ResetValue();
+                monster.ResetMaxHP(monsterDataList[monster.Level].maxHp);
+
                 return monsterList[i];
             }
         }
