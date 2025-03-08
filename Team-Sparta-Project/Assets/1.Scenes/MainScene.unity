@@ -1219,10 +1219,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heroMaxHP: 100
   bulletPrefab: {fileID: 5571540100461868937, guid: 88aa147da9fdd3b4c9f79e5a9d780117, type: 3}
-  minGunRotation: -100
+  minGunRotation: -120
   maxGunRotation: 10
-  gunFireRate: 0.2
+  gunFireRate: 3
   gunMaxBullets: 10
+  bulletSpeed: 10
   boxMaxHP: 2000
   boxDropSpeed: 1000
   monsterDataList:

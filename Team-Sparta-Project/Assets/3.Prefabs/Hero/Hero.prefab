@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: 9115941406881483208}
   - component: {fileID: 7518584993005002447}
   - component: {fileID: 4544478707908880995}
+  - component: {fileID: 2184611864289402905}
   m_Layer: 0
   m_Name: ChaGun_0
   m_TagString: Untagged
@@ -119,7 +120,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3019760252934347332}
   m_Father: {fileID: 175888370978376783}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -48.989}
 --- !u!212 &7518584993005002447
@@ -186,6 +188,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b54a95fca0200d41b65c6a40f92b512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2184611864289402905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1975591559162416938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b32b282bd39e464a97ed1c118771102, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 5571540100461868937, guid: 88aa147da9fdd3b4c9f79e5a9d780117, type: 3}
+  fireRate: 0
+  isFiring: 0
+  maxBullets: 0
+  bulletSpeed: 0
+  gunMuzzle: {fileID: 3019760252934347332}
+  bulletList: []
 --- !u!1 &4323381231780552914
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,6 +425,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 4
+--- !u!1 &8130410843302807422
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3019760252934347332}
+  m_Layer: 0
+  m_Name: gunMuzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3019760252934347332
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8130410843302807422}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: 0.2660562, w: 0.96395755}
+  m_LocalPosition: {x: 0.445, y: 0.319, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9115941406881483208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 30.859}
 --- !u!1 &8958240697474582917
 GameObject:
   m_ObjectHideFlags: 0

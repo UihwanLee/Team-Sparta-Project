@@ -50,8 +50,6 @@ public class MonsterPathManager : MonoBehaviour
         pathColliders.Add(GetColliders(path1Objects));
         pathColliders.Add(GetColliders(path2Objects));
         pathColliders.Add(GetColliders(path3Objects));
-
-        Debug.Log(pathColliders[0][0].name + pathColliders[0][1].name + pathColliders[1][0].name + pathColliders[1][1].name);
     }
 
     private Collider2D[] GetColliders(GameObject[] pathObjects)

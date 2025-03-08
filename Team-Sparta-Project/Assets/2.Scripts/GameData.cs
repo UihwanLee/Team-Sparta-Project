@@ -64,6 +64,7 @@ public class GameData : MonoBehaviour
     [SerializeField] private float maxGunRotation = 10.0f;                  // 총 최대 각도
     [SerializeField] private float gunFireRate = 0.2f;                      // 총알 발사 간격
     [SerializeField] private int gunMaxBullets = 10;                        // 최대 총알 개수
+    [SerializeField] private float bulletSpeed = 10.0f;                     // 총알 스피드
    
     [Header("TruckManager")]
     [SerializeField] private int boxMaxHP = 100;                            // Box 최대 체력
@@ -88,6 +89,7 @@ public class GameData : MonoBehaviour
     public float MaxGunRotation { get { return maxGunRotation; } }
     public float GunFireRate { get { return gunFireRate; } }
     public int GunMaxBullets { get { return gunMaxBullets; } }
+    public float BulletSpeed { get { return bulletSpeed; } }
 
     // TruckManager
     public int BoxMaxHP { get { return boxMaxHP; } }
