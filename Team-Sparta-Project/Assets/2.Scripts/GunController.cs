@@ -26,6 +26,7 @@ public class GunController : MonoBehaviour
 
     private void InitValue()
     {
+        // GUN 정보 초기화
         bulletPrefab = GameData.Instance.BulletPrefab;
         fireRate = GameData.Instance.GunFireRate;
         maxBullets = GameData.Instance.GunMaxBullets;
@@ -59,6 +60,7 @@ public class GunController : MonoBehaviour
 
     private void TryFireBullet()
     {
+        // 발사 시도
         if(!isFiring)
         {
             FireBullets();
@@ -67,6 +69,7 @@ public class GunController : MonoBehaviour
 
     private void FireBullets()
     {
+        // 발사 코루틴 시작
         StartCoroutine(FireBulletsCoroutine());
     }
 
@@ -87,6 +90,7 @@ public class GunController : MonoBehaviour
 
     private void Fire()
     {
+        // 총알 POOL에서 총알 가져와 발사
         GameObject bullet = GetBulletFromPool();
 
         if(bullet == null) { Debug.Log("총알이 없습니다!"); return; }
@@ -124,6 +128,7 @@ public class GunController : MonoBehaviour
 
     public void ReturnBulletToPool(GameObject _bullet)
     {
-        _bullet.SetActive(false); // 총알을 비활성화하여 풀에 반환
+        // 총알을 비활성화하여 풀에 반환
+        _bullet.SetActive(false); 
     }
 }

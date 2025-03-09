@@ -21,6 +21,7 @@ public class Bullet : MonoBehaviour
 
     public void InitBullet(GunController _gunController, float _bulletSpeed)
     {
+        // 총알 초기화
         bulletSpeed = _bulletSpeed;
         gunController = _gunController;
         this.gameObject.SetActive(false);
@@ -28,6 +29,7 @@ public class Bullet : MonoBehaviour
 
     public void Fire(Vector2 direction)
     {
+        // 발사
         Vector2 moveDirection = direction.normalized;
         rb.velocity = moveDirection * bulletSpeed;
     }

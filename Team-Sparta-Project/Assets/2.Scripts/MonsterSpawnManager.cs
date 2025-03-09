@@ -20,6 +20,7 @@ public class MonsterSpawnManager : MonoBehaviour
 
     private void InitMonster()
     {
+        // 몬스터 정보 초기화
         spawnTime = GameData.Instance.MonsterSpawnTime;
         curTime = spawnTime;
     }
@@ -37,6 +38,7 @@ public class MonsterSpawnManager : MonoBehaviour
 
     private void SpawnMonsterPoint()
     {
+        // 소환 포인트에 몬스터 소환
         int level = 0;
         GameObject monster = MonsterPoolManager.Instance.GetMonsterFromPool(level);
 

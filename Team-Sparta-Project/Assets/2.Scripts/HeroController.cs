@@ -31,6 +31,7 @@ public class HeroController : MonoBehaviour
 
     private void InitValue()
     {
+        // 히어로 정보 초기화
         maxHp = GameData.Instance.HeroMaxHP;
         hp = maxHp;
     }
@@ -58,6 +59,7 @@ public class HeroController : MonoBehaviour
 
     private IEnumerator DamageEffect()
     {
+        // 타격 색상 변화
         if (heroSpriteRender != null)
         {
             Color damageColor;
@@ -73,15 +75,17 @@ public class HeroController : MonoBehaviour
 
     private void UpdateHpSlider()
     {
+        // 슬라이더 value를 HP 값으로 업데이트
         if (hpBar != null)
         {
             Slider hpSlider = hpBar.GetComponentInChildren<Slider>();
-            hpSlider.value = (float)hp / maxHp; // HP 값을 0~1 범위로 변환
+            hpSlider.value = (float)hp / maxHp;
         }
     }
 
     private void Dead()
     {
+        // 히어로 죽을 시 오브젝트 파괴
         isDead = true;
 
         Destroy(gameObject);
