@@ -73,6 +73,7 @@ public class MonsterController : MonoBehaviour
 
     public void ResetValue()
     {
+        // 정보 리셋
         ui_Damage.SetActive(false);
         textColor = Color.white;
 
@@ -88,6 +89,7 @@ public class MonsterController : MonoBehaviour
 
     public void ResetMaxHP(int _maxHP)
     {
+        // HP / HP바 리셋
         maxHp = _maxHP;
         hp = maxHp;
 
@@ -150,12 +152,14 @@ public class MonsterController : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
+        // 공격 기능
         if(collision.gameObject.tag == TagData.TAG_BOX || 
             collision.gameObject.tag == TagData.HERO)
         {
             TryAttack(collision.gameObject);
         }
 
+        //
         if (collision.gameObject.layer == LayerMask.NameToLayer(layer))
         {
             HandleCollision(collision);
@@ -250,6 +254,7 @@ public class MonsterController : MonoBehaviour
 
     IEnumerator DamageShow(int _dmg)
     {
+        // 데미지 표기
         ui_Damage.SetActive(true);
         ui_Damage_Text.text = _dmg.ToString();
         yield return StartCoroutine(FadeText(ui_Damage_Text, 0, 1, 0.5f)); 
@@ -259,6 +264,7 @@ public class MonsterController : MonoBehaviour
 
     private IEnumerator FadeText(TextMeshProUGUI text, float startAlpha, float endAlpha, float duration)
     {
+        // Fade 효과
         float elapsedTime = 0f;
         while (elapsedTime < duration)
         {
@@ -276,15 +282,17 @@ public class MonsterController : MonoBehaviour
 
     private void UpdateHpSlider()
     {
+        // 슬라이더 value를 HP 값으로 업데이트
         if (hpBar != null)
         {
             Slider hpSlider = hpBar.GetComponentInChildren<Slider>();
-            hpSlider.value = (float)hp / maxHp; // HP 값을 0~1 범위로 변환
+            hpSlider.value = (float)hp / maxHp; 
         }
     }
 
     private void Dead()
     {
+        // 몬스터 죽을 시 죽는 모션
         isDead = true;
 
         StartCoroutine(DeadCoroutine());    
@@ -325,6 +333,7 @@ public class MonsterController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
+        // 위에 몬스터가 없을 시 슬라이드 종료
         if (collision.gameObject.layer == LayerMask.NameToLayer(layer) && collision.transform.position.y > transform.position.y)
         {
             isSliding = false;
@@ -333,6 +342,7 @@ public class MonsterController : MonoBehaviour
 
     private int GetHitPosition(Collision2D collision)
     {
+        // 충돌 객체의 위치 판별
         Vector2 otherPos = collision.transform.position;
         Vector2 myPos = transform.position;
 
@@ -359,6 +369,7 @@ public class MonsterController : MonoBehaviour
 
     private void IgnoreCollisionList(Collider2D _collider, Collider2D[] ignoreColliders)
     {
+        // 충돌체 무시
         foreach (Collider2D collider in ignoreColliders)
         {
             if (collider != null && _collider != null)
@@ -368,19 +379,9 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-    private void ResetCollisionList(Collider2D _collider, Collider2D[] ignoreColliders)
-    {
-        foreach (Collider2D collider in ignoreColliders)
-        {
-            if (collider != null && _collider != null)
-            {
-                Physics2D.IgnoreCollision(_collider, collider, true);
-            }
-        }
-    }
-
     public void SetSprites(List<Sprite> _sprites)
     {
+        // 이미지 변경
         if (this.spriteRenderers.Count == 0) { Debug.LogError("SetSprites: This list does not exist!"); }
 
         for (int i=0; i< _sprites.Count; i++)
@@ -388,10 +389,17 @@ public class MonsterController : MonoBehaviour
             this.spriteRenderers[i].sprite = _sprites[i];
         }
     }
-    public void SetInfo(int _id, string _title, int _level, int _maxHp, int _damage, float _speed) { id = _id; title = _title; level = _level; maxHp = _maxHp; hp = _maxHp; damage = _damage; speed = _speed; }
+
+   
+    public void SetInfo(int _id, string _title, int _level, int _maxHp, int _damage, float _speed) 
+    {
+        // 정보 저장
+        id = _id; title = _title; level = _level; maxHp = _maxHp; hp = _maxHp; damage = _damage; speed = _speed;
+    }
 
     public void AddOrderLayer(int amount)
     {
+        // 이미지 레이아웃 오더 증가
         foreach(SpriteRenderer render in spriteRenderers)
         {
             render.sortingOrder += amount;

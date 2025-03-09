@@ -14,16 +14,19 @@ public class GunRotation : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            // 마우스 클릭 시 gunVision 키기
             isDragging = true;
             gunVision.SetActive(true);
         }
         if (Input.GetMouseButtonUp(0))
         {
+            // 마우스 땔 시 gunVision 끄기
             isDragging = false;
             gunVision.SetActive(false);
         }
         if (isDragging)
         {
+            // 마우스 드래그 시 총 각도 조정
             RotateGunTowardsMouse();
         }
 

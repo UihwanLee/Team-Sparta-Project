@@ -52,6 +52,7 @@ public class MonsterPoolManager : MonoBehaviour
 
     private void InitValue()
     {
+        // 몬스터 POOL 정보 초기화
         monsterDataList = GameData.Instance.MonsterDataList;
         monsterPrefab = GameData.Instance.MonsterPrefab;
     }
@@ -103,6 +104,7 @@ public class MonsterPoolManager : MonoBehaviour
 
     public GameObject GetMonsterFromPool(int _level, int _id)
     {
+        // 가용가능한 몬스터 가져오기
         GameObject[] monsterList = monsterPoolList[_level];
         if (monsterList == null) { Debug.LogError("That monster list does not exist!"); return null; }
 
@@ -111,6 +113,7 @@ public class MonsterPoolManager : MonoBehaviour
 
     public void ReturnMonsterToPool(int _level, int _id)
     {
+        // 사용하지 않은 몬스터 반환
         GameObject[] monsterList = monsterPoolList[_level];
         if (monsterList == null) { Debug.LogError("That monster list does not exist!"); return; }
 

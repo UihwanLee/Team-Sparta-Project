@@ -43,6 +43,7 @@ public class MonsterPathManager : MonoBehaviour
 
     private void InitPathColliders()
     {
+        // 3가지 경로 Collider 저장
         GameObject[] path1Objects = GameObject.FindGameObjectsWithTag(TagData.TAG_PATH_1);
         GameObject[] path2Objects = GameObject.FindGameObjectsWithTag(TagData.TAG_PATH_2);
         GameObject[] path3Objects = GameObject.FindGameObjectsWithTag(TagData.TAG_PATH_3);
@@ -54,6 +55,7 @@ public class MonsterPathManager : MonoBehaviour
 
     private Collider2D[] GetColliders(GameObject[] pathObjects)
     {
+        // Collider2D 반환
         Collider2D[] colliders = new Collider2D[pathObjects.Length];
         for (int i = 0; i < pathObjects.Length; i++)
         {
